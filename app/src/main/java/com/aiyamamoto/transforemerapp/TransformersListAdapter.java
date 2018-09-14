@@ -19,11 +19,18 @@ import java.util.ArrayList;
 
 public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<TransformerResponse> mTransforemerList = new ArrayList<>();
-    Activity activity;
+    Activity mActivity;
 
-    public TransformersListAdapter(Activity mActivity, TransformersList mTransforemerList) {
-        activity = mActivity;
+    private AdapterCallback mAdapterCallback;
+
+    public interface AdapterCallback {
+        void deleteTransformer(String transformerId, String name);
+    }
+
+    public TransformersListAdapter(Activity activity, AdapterCallback adapterCallback, TransformersList mTransforemerList) {
+        mActivity = activity;
         this.mTransforemerList = mTransforemerList.getTransformers();
+        mAdapterCallback = adapterCallback;
     }
 
     @Override
@@ -66,8 +73,9 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
             public boolean onLongClick(View view) {
                 switch (view.getId()) {
                     case R.id.card_layout:
+                        mAdapterCallback.deleteTransformer(mTransforemerList.get(getAdapterPosition()).getId()
+                                , mTransforemerList.get(getAdapterPosition()).getName());
                         break;
-
                     default:
                         break;
                 }

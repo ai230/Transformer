@@ -1,8 +1,10 @@
 package com.aiyamamoto.transforemerapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +13,9 @@ import android.widget.Toast;
 
 import com.aiyamamoto.transforemerapp.base.BaseFragment;
 import com.aiyamamoto.transforemerapp.databinding.FragmentTransformersListBinding;
-import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.model.TransformersList;
 import com.aiyamamoto.transforemerapp.network.TransformerService;
 import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,16 +25,59 @@ import retrofit2.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class TransformersListFragment extends BaseFragment{
+public class TransformersListFragment extends BaseFragment implements TransformersListAdapter.AdapterCallback{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private FragmentTransformersListBinding mBinding;
+    private TransformersListAdapter mTransformersListAdapter;
+
     TransformersListFragmentListener transformersListFragmentListener;
+
+    @Override
+    public void deleteTransformer(final String transformerId, String name) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("DELETE")
+                .setMessage("Are you sure, you want to delete " + name)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // OK button pressed
+                        TransformerService.deleteTransformer(deleteTransformerCallback, transformerId);
+                    }
+                })
+                .setNegativeButton("CANCEL", null)
+                .show();
+    }
 
     public interface TransformersListFragmentListener {
         void addCreateTransformerFragment();
     }
+
+    private Callback<Void> deleteTransformerCallback = new Callback<Void>() {
+        @Override
+        public void onResponse(Call<Void> call, Response<Void> response) {
+            switch (response.code()) {
+                case 204:
+                    showToast("Deleted.");
+                    findToken();
+                    break;
+                case 401:
+                    showToast("401, Try again.");
+                    break;
+                default:
+                    showToast("Failed to get Transfermers list, Try again.");
+                    break;
+            }
+        }
+
+        @Override
+        public void onFailure(Call<Void> call, Throwable t) {
+            showToast("Failed to get Transfermers list, Try again.");
+        }
+    };
+
 
     public static TransformersListFragment newInstance() {
         TransformersListFragment fragment = new TransformersListFragment();
@@ -50,10 +92,6 @@ public class TransformersListFragment extends BaseFragment{
         fragment.setArguments(args);
         return fragment;
     }
-
-    private FragmentTransformersListBinding mBinding;
-    TransformersListAdapter mTransformersListAdapter;
-    ArrayList<Transformer> transformers = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,8 +125,17 @@ public class TransformersListFragment extends BaseFragment{
     }
 
     private void findToken() {
-        getToken();
+        getToken(); //TODO dose't need to go through when it came back from deleteing
+        getTrasnformersList(this);
+    }
 
+    private void setToken(String token) {
+        SharedPreferencesUtils.setToken(getActivity(), token);
+    }
+
+    private void getToken() {
+        TransformerService.ACCESS_TOKEN = "";
+        TransformerService.ACCESS_TOKEN = SharedPreferencesUtils.getToken(getActivity());
         if (TransformerService.ACCESS_TOKEN.equals("")) {
             TransformerService.getAllsparkToken(new Callback<String>() {
                 @Override
@@ -107,16 +154,6 @@ public class TransformersListFragment extends BaseFragment{
                 }
             });
         }
-        getTrasnformersList();
-    }
-
-    private void setToken(String token) {
-        SharedPreferencesUtils.setToken(getActivity(), token);
-    }
-
-    private void getToken() {
-        TransformerService.ACCESS_TOKEN = "";
-        TransformerService.ACCESS_TOKEN = SharedPreferencesUtils.getToken(getActivity());
     }
 
     private void clearToken() {
@@ -124,14 +161,14 @@ public class TransformersListFragment extends BaseFragment{
         TransformerService.ACCESS_TOKEN = SharedPreferencesUtils.getToken(getActivity());
     }
 
-    private void getTrasnformersList() {
+    private void getTrasnformersList(final TransformersListAdapter.AdapterCallback callback) {
         TransformerService.getTransformersList(new Callback<TransformersList>() {
             @Override
             public void onResponse(Call<TransformersList> call, Response<TransformersList> response) {
                 switch (response.code()) {
                     case 200:
                         TransformersList transformersList = response.body();
-                        mTransformersListAdapter = new TransformersListAdapter(getActivity(), transformersList);
+                        mTransformersListAdapter = new TransformersListAdapter(getActivity(), callback, transformersList);
                         mBinding.recyclerView.setAdapter(mTransformersListAdapter);
                         break;
                     case 401:
@@ -162,5 +199,19 @@ public class TransformersListFragment extends BaseFragment{
     public void onDetach() {
         super.onDetach();
         transformersListFragmentListener = null;
+    }
+
+    private void showAlertDialog() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("title")
+                .setMessage("message")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // OK button pressed
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 }
