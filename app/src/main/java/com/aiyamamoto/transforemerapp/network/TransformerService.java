@@ -18,10 +18,7 @@ import retrofit2.Callback;
 
 public class TransformerService {
 
-    public static String ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0cmFuc2Zvcm1lcnNJZCI6Ii1MTUwyVnAwNmtJX3NrZngxYnNWIiwiaWF0IjoxNTM2ODk0NTcyfQ.9GQC0p1KfdIFccPg1lhJoA3HK3oYQbyM96P8FD8l-yk";
-    private static String header = "Bearer " + ACCESS_TOKEN + "";
-
-    private static final String MULTIPART_DATA = "multipart/form-data";
+    public static String ACCESS_TOKEN;
 
     public static void getAllsparkToken(Callback<String> callback) {
         RetrofitBuilder.getTransformerApi().getAllsparkToken("application/json").enqueue(callback);
@@ -29,13 +26,13 @@ public class TransformerService {
 
     public static void createTransformer(CreateTransformerBody body, Callback<TransformerResponse> callback) {
 
-        RetrofitBuilder.getTransformerApi().createTransformer(header, body).enqueue(callback);
+        RetrofitBuilder.getTransformerApi().createTransformer("Bearer " + ACCESS_TOKEN, body).enqueue(callback);
 
     }
 
     public static void getTransformersList(Callback<TransformersList> callback) {
 
-        RetrofitBuilder.getTransformerApi().getTransformersList(header).enqueue(callback);
+        RetrofitBuilder.getTransformerApi().getTransformersList("Bearer " + ACCESS_TOKEN).enqueue(callback);
 
     }
 }

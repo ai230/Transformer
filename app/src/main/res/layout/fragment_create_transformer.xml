@@ -1,65 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/text_size_small"
-            android:orientation="vertical"
-            android:background="#fff">
-
-            <android.support.design.widget.TextInputLayout
+            android:layout_above="@+id/createTransformerBtn">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textInputLayout">
+                android:padding="@dimen/text_size_small"
+                android:orientation="vertical"
+                android:background="#fff">
 
-                <EditText
+                <TextView
+                    android:id="@+id/new_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPink"
+                    android:padding="@dimen/margin_tiny"
+                    android:text="New"/>
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name" />
+                    android:id="@+id/textInputLayout">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/name_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Name" />
+
+                </android.support.design.widget.TextInputLayout>
 
 
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@id/textInputLayout">
+                <RadioGroup
+                    android:id="@+id/radio_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/textInputLayout">
 
-                <RadioButton
-                    android:id="@+id/radioButton"
+                    <RadioButton
+                        android:id="@+id/autobots_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:value="Autobots"
+                        android:text="Autobots" />
+
+                    <RadioButton
+                        android:id="@+id/decepticon_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:value="Decepticon"
+                        android:text="Decepticon" />
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/strength_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RadioButton" />
+                    android:text="Strength"/>
 
-                <RadioButton
-                    android:id="@+id/radioButton2"
+                <SeekBar
+                    android:id="@+id/seekBar_strength"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"/>
+
+                <TextView
+                    android:id="@+id/intelligence_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RadioButton" />
-            </RadioGroup>
+                    android:text="Intelligence"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name"/>
+                <SeekBar
+                    android:id="@+id/seekBar_intelligence"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Speed"/>
 
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <SeekBar
+                    android:id="@+id/seekBar_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"/>
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Endurance"/>
+
+                <SeekBar
+                    android:id="@+id/seekBar_endurance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rank"/>
+
+                <SeekBar
+                    android:id="@+id/seekBar_rank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Courage"/>
+
+                <SeekBar
+                    android:id="@+id/seekBar_courage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Firepower"/>
+
+                <SeekBar
+                    android:id="@+id/seekBar_firepower"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Skill"/>
+
+                <SeekBar
+                    android:id="@+id/seekBar_skill"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="10"/>
+
+
+
+            </LinearLayout>
+        </ScrollView>
 
         <Button
+            android:id="@+id/createTransformerBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:background="@color/colorBlue"
             android:text="Create Transformer"/>
     </RelativeLayout>
 

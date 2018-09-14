@@ -19,9 +19,10 @@ import java.util.ArrayList;
 
 public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<TransformerResponse> mTransforemerList = new ArrayList<>();
+    Activity activity;
 
     public TransformersListAdapter(Activity mActivity, TransformersList mTransforemerList) {
-
+        activity = mActivity;
         this.mTransforemerList = mTransforemerList.getTransformers();
     }
 
@@ -46,17 +47,39 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
     private class ItemTransformersListHolder extends RecyclerView.ViewHolder {
         ItemTransformerBinding binding;
 
-        private View.OnClickListener mOnclickListener1 = new View.OnClickListener() {
+        private View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.card_layout:
 
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        };
+
+        View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                switch (view.getId()) {
+                    case R.id.card_layout:
+                        break;
+
+                    default:
+                        break;
+                }
+                return true;
             }
         };
 
         public ItemTransformersListHolder(View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
-//            binding.dataLayout.setOnClickListener(mOnClickListener);
+            binding.cardLayout.setOnClickListener(mOnClickListener);
+            binding.cardLayout.setOnLongClickListener(mOnLongClickListener);
 //            binding.button.setOnClickListener(mOnClickListener);
 //            binding.name.setText();
         }

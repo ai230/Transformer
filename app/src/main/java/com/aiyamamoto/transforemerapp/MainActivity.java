@@ -1,31 +1,29 @@
 package com.aiyamamoto.transforemerapp;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.network.TransformerService;
-import com.aiyamamoto.transforemerapp.network.body.CreateTransformerBody;
 import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
-
-import java.util.List;
+import com.aiyamamoto.transforemerapp.utils.AppUtils;
+import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TransformersListFragment.TransformersListFragmentListener,
+        CreateTransformerFragment.CreateTransformerFragmentListner{
 
     Callback<TransformerResponse> createTransforCallback;
-
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,59 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Add CreateTransformerFragment
-                AppUtils.navigateToFragment(getSupportFragmentManager(), CreateTransformerFragment.newInstance());
-            }
-        });
-
-        if (TransformerService.ACCESS_TOKEN == "") {
-//            TransformerService.getAllsparkToken(new Callback<String>() {
-//                @Override
-//                public void onResponse(Call<String> call, Response<String> response) {
-//                    if (response.code() == 200) {
-//                        String token = response.body().toString();
-//                        TransformerService.ACCESS_TOKEN = response.body().toString();
-//                        CreateTransformerBody body = new CreateTransformerBody("Soundwave", "D",2, 3,4,5,6,7, 10, 9);
-//
-//                        TransformerService.createTransformer(body, createTransforCallback);
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<String> call, Throwable t) {
-//
-//                }
-//            });
-        } else {
-
-        }
-
-
-//        CreateTransformerBody body = new CreateTransformerBody("BLADES", "A",2, 3,4,5,6,7, 10, 9);
-//        TransformerService.createTransformer(body, createTransforCallback);
-//        createTransforCallback = new Callback<TransformerResponse>() {
-//            @Override
-//            public void onResponse(Call<TransformerResponse> call, Response<TransformerResponse> response) {
-//                switch (response.code()) {
-//                    case 201:
-//
-//                        break;
-//                    case 401:
-//                        break;
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<TransformerResponse> call, Throwable t) {
-//
-//            }
-//        };
+        AppUtils.navigateToFragment(getSupportFragmentManager(), TransformersListFragment.newInstance());
     }
 
     @Override
@@ -108,5 +54,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Fragment f = AppUtils.findFragmentByTag(getSupportFragmentManager(),"createTFFragment");
+        AppUtils.removeFragment(getSupportFragmentManager(), f);
+    }
+
+    @Override
+    public void addCreateTransformerFragment() {
+        AppUtils.navigateToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance());
+    }
+
+    @Override
+    public void backToTransformerListFragment() {
+        AppUtils.navigateToFragment(getSupportFragmentManager(),TransformersListFragment.newInstance());
     }
 }

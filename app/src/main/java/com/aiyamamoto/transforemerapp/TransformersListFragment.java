@@ -1,19 +1,20 @@
 package com.aiyamamoto.transforemerapp;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.aiyamamoto.transforemerapp.base.BaseFragment;
 import com.aiyamamoto.transforemerapp.databinding.FragmentTransformersListBinding;
 import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.model.TransformersList;
 import com.aiyamamoto.transforemerapp.network.TransformerService;
-import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
+import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 
@@ -25,19 +26,22 @@ import retrofit2.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class TransformersListFragment extends BaseFragment {
+public class TransformersListFragment extends BaseFragment{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-//    Callback<List<TransformerResponse>> mTransforsListCallback;
-//
-//    mTransforsListCallback = new Callback<List<TransformerResponse>>
-    public TransformersListFragment() {
-        // Required empty public constructor
+    TransformersListFragmentListener transformersListFragmentListener;
+
+    public interface TransformersListFragmentListener {
+        void addCreateTransformerFragment();
     }
 
-    // TODO: Rename and change types and number of parameters
+    public static TransformersListFragment newInstance() {
+        TransformersListFragment fragment = new TransformersListFragment();
+        return fragment;
+    }
+
     public static TransformersListFragment newInstance(String param1, String param2) {
         TransformersListFragment fragment = new TransformersListFragment();
         Bundle args = new Bundle();
@@ -55,23 +59,69 @@ public class TransformersListFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_transformers_list, container, false);
-        getTrasnformersList();
+        mBinding.fab.setOnClickListener(mOnClickListener);
+        mBinding.fab.setVisibility(View.VISIBLE);
+        findToken();
         initTransformerListRecycler();
         return mBinding.getRoot();
     }
 
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.fab:
+                    transformersListFragmentListener.addCreateTransformerFragment();
+                    mBinding.fab.setVisibility(View.INVISIBLE);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    };
+
     private void initTransformerListRecycler() {
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.recyclerView.setHasFixedSize(true);
-//        mTransformersListAdapter = new TransformersListAdapter(getActivity(), transformers);
-//        mBinding.recyclerView.setAdapter(mTransformersListAdapter);
     }
 
-    private void createTransformers() {
-        Transformer t1 = new Transformer(1, "trams", 2,3,4,5,6,7, "A");
-        Transformer t2 = new Transformer(2, "trams123", 2,3,4,5,6,7, "A");
-        transformers.add(t1);
-        transformers.add(t2);
+    private void findToken() {
+        getToken();
+
+        if (TransformerService.ACCESS_TOKEN.equals("")) {
+            TransformerService.getAllsparkToken(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if (response.code() == 200) {
+                        TransformerService.ACCESS_TOKEN = response.body().toString();
+                        setToken(TransformerService.ACCESS_TOKEN);
+                    } else {
+                        Toast.makeText(getActivity(), "Try again", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(getActivity(), "Try again", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        getTrasnformersList();
+    }
+
+    private void setToken(String token) {
+        SharedPreferencesUtils.setToken(getActivity(), token);
+    }
+
+    private void getToken() {
+        TransformerService.ACCESS_TOKEN = "";
+        TransformerService.ACCESS_TOKEN = SharedPreferencesUtils.getToken(getActivity());
+    }
+
+    private void clearToken() {
+        SharedPreferencesUtils.clearToken(getActivity());
+        TransformerService.ACCESS_TOKEN = SharedPreferencesUtils.getToken(getActivity());
     }
 
     private void getTrasnformersList() {
@@ -90,7 +140,6 @@ public class TransformersListFragment extends BaseFragment {
                     default:
                         showToast("Failed to get Transfermers list, Try again.");
                         break;
-
                 }
             }
 
@@ -99,5 +148,19 @@ public class TransformersListFragment extends BaseFragment {
                 showToast("Failed to get Transfermers list, Try again.");
             }
         });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof TransformersListFragmentListener) {
+            transformersListFragmentListener = (TransformersListFragmentListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        transformersListFragmentListener = null;
     }
 }
