@@ -1,5 +1,7 @@
 package com.aiyamamoto.transforemerapp;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,14 +11,21 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.aiyamamoto.transforemerapp.model.AllsparkToken;
+import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.network.TransformerService;
+import com.aiyamamoto.transforemerapp.network.body.CreateTransformerBody;
+import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
+    Callback<TransformerResponse> createTransforCallback;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,24 +38,54 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // Add CreateTransformerFragment
+                AppUtils.navigateToFragment(getSupportFragmentManager(), CreateTransformerFragment.newInstance());
             }
         });
 
-        TransformerService.getAllsparkToken(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.code() == 200) {
-                    String token = response.body().toString();
-                }
-            }
+        if (TransformerService.ACCESS_TOKEN == "") {
+//            TransformerService.getAllsparkToken(new Callback<String>() {
+//                @Override
+//                public void onResponse(Call<String> call, Response<String> response) {
+//                    if (response.code() == 200) {
+//                        String token = response.body().toString();
+//                        TransformerService.ACCESS_TOKEN = response.body().toString();
+//                        CreateTransformerBody body = new CreateTransformerBody("Soundwave", "D",2, 3,4,5,6,7, 10, 9);
+//
+//                        TransformerService.createTransformer(body, createTransforCallback);
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<String> call, Throwable t) {
+//
+//                }
+//            });
+        } else {
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
+        }
 
-            }
-        });
+
+//        CreateTransformerBody body = new CreateTransformerBody("BLADES", "A",2, 3,4,5,6,7, 10, 9);
+//        TransformerService.createTransformer(body, createTransforCallback);
+//        createTransforCallback = new Callback<TransformerResponse>() {
+//            @Override
+//            public void onResponse(Call<TransformerResponse> call, Response<TransformerResponse> response) {
+//                switch (response.code()) {
+//                    case 201:
+//
+//                        break;
+//                    case 401:
+//                        break;
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<TransformerResponse> call, Throwable t) {
+//
+//            }
+//        };
     }
 
     @Override

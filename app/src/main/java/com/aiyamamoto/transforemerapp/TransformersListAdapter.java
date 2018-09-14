@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aiyamamoto.transforemerapp.databinding.ItemTransformerBinding;
-import com.aiyamamoto.transforemerapp.model.Transformer;
+import com.aiyamamoto.transforemerapp.model.TransformersList;
+import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
 
 import java.util.ArrayList;
 
@@ -17,10 +18,11 @@ import java.util.ArrayList;
  */
 
 public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<Transformer> mTransforemerList = new ArrayList<>();
+    private ArrayList<TransformerResponse> mTransforemerList = new ArrayList<>();
 
-    public TransformersListAdapter(Activity mActivity, ArrayList<Transformer> mTransforemerList) {
-        this.mTransforemerList = mTransforemerList;
+    public TransformersListAdapter(Activity mActivity, TransformersList mTransforemerList) {
+
+        this.mTransforemerList = mTransforemerList.getTransformers();
     }
 
     @Override
@@ -31,7 +33,7 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Transformer mTransformer = (Transformer) mTransforemerList.get(position);
+        TransformerResponse mTransformer = (TransformerResponse) mTransforemerList.get(position);
         ItemTransformersListHolder itemTransformersListHolder = (ItemTransformersListHolder) holder;
         itemTransformersListHolder.binding.setItem(mTransformer);
     }

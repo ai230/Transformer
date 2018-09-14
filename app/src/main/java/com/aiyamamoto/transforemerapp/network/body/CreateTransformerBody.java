@@ -1,41 +1,65 @@
-package com.aiyamamoto.transforemerapp.model;
+package com.aiyamamoto.transforemerapp.network.body;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by aiyamamoto on 2018-09-13.
  */
 
-public class Transformer {
-    private int id;
-    private String name;
-    private int strength;
-    private int intelligence;
-    private int speed;
-    private int endurance;
-    private int rank;
-    private int courage;
-    private int firepower;
-    private int skill;
-    private String team; // "A" or "D"
-    private String team_icon;
+public class CreateTransformerBody {
 
-    public Transformer(int id, String name, int speed, int endurance, int rank, int courage, int firepower, int skill, String team) {
-        this.id = id;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("team")
+    @Expose
+    private String team;
+
+    @SerializedName("strength")
+    @Expose
+    private int strength;
+    @SerializedName("intelligence")
+    @Expose
+    private int intelligence;
+    @SerializedName("speed")
+    @Expose
+    private int speed;
+    @SerializedName("endurance")
+    @Expose
+    private int endurance;
+    @SerializedName("rank")
+    @Expose
+    private int rank;
+    @SerializedName("courage")
+    @Expose
+    private int courage;
+    @SerializedName("firepower")
+    @Expose
+    private int firepower;
+    @SerializedName("skill")
+    @Expose
+    private int skill;
+
+    public CreateTransformerBody(String name, String team, int strength, int intelligence, int speed, int endurance, int rank, int courage, int firepower, int skill) {
         this.name = name;
+        this.team = team;
+        this.strength = strength;
+        this.intelligence = intelligence;
         this.speed = speed;
         this.endurance = endurance;
         this.rank = rank;
         this.courage = courage;
         this.firepower = firepower;
         this.skill = skill;
-        this.team = team;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getTeam() {
+        return team;
     }
 
     public int getStrength() {
@@ -68,17 +92,5 @@ public class Transformer {
 
     public int getSkill() {
         return skill;
-    }
-
-    public String getTeam() {
-        return team;
-    }
-
-    public void setTeam_icon(String team_icon) {
-        this.team_icon = team_icon;
-    }
-
-    public String getTeam_icon() {
-        return team_icon;
     }
 }

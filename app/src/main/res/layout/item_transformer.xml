@@ -7,26 +7,183 @@
 
         <variable
             name="item"
-            type="com.aiyamamoto.transforemerapp.model.Transformer"/>
+            type="com.aiyamamoto.transforemerapp.network.response.TransformerResponse"/>
     </data>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp">
 
         <RelativeLayout
             android:id="@+id/card_layout"
+            android:padding="@dimen/text_size_small"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <!--<TextView-->
+                <!--android:id="@+id/name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@{item.name}" />-->
+
+            <TextView
+                android:id="@+id/overall_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:textSize="@dimen/text_size_medium"
+                android:background="@drawable/circle_bg"
+                android:textColor="#fff"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:text="31" />
+
+            <ImageView
+                android:id="@+id/team_icon_imageview"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_launcher_background"/>
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/team_icon_imageview"
+                android:layout_below="@+id/team"
+                android:textSize="@dimen/text_size_medium"
                 android:text="@{item.name}" />
+
+            <TextView
+                android:id="@+id/team"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/team_icon_imageview"
+                android:layout_alignTop="@+id/team_icon_imageview"
+                android:textSize="@dimen/text_size_tiny"
+                android:text="Team" />
+
+            <TextView
+                android:id="@+id/strength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/team_icon_imageview"
+                android:text="Strength" />
+
+            <TextView
+                android:id="@+id/strength_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/team_icon_imageview"
+                android:layout_toRightOf="@+id/strength"
+                android:text="7" />
+
+            <TextView
+                android:id="@+id/intelligence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/strength"
+                android:text="Intelligence" />
+
+            <TextView
+                android:id="@+id/intelligence_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/strength"
+                android:layout_toRightOf="@+id/intelligence"
+                android:text="10" />
+
+            <TextView
+                android:id="@+id/speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/intelligence"
+                android:text="Speed" />
+
+            <TextView
+                android:id="@+id/speed_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/intelligence"
+                android:layout_toRightOf="@+id/speed"
+                android:text="10" />
+
+            <TextView
+                android:id="@+id/endurance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/speed"
+                android:text="Endurance" />
+
+            <TextView
+                android:id="@+id/endurance_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/speed"
+                android:layout_toRightOf="@+id/endurance"
+                android:text="10" />
+
+            <TextView
+                android:id="@+id/rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/endurance"
+                android:text="Rank" />
+
+            <TextView
+                android:id="@+id/rank_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/endurance"
+                android:layout_toRightOf="@+id/rank"
+                android:text="10" />
+
+            <TextView
+                android:id="@+id/courage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rank"
+                android:text="Courage" />
+
+            <TextView
+                android:id="@+id/courage_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rank"
+                android:layout_toRightOf="@+id/courage"
+                android:text="10" />
+
+            <TextView
+                android:id="@+id/firepower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/courage"
+                android:text="Firepower" />
+
+            <TextView
+                android:id="@+id/firepower_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/courage"
+                android:layout_toRightOf="@+id/firepower"
+                android:text="10" />
+
+            <TextView
+                android:id="@+id/skill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/firepower"
+                android:text="Skill" />
+            <TextView
+                android:id="@+id/skill_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/firepower"
+                android:layout_toRightOf="@+id/skill"
+                android:text="10" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
