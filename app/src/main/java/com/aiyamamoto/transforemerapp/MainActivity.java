@@ -10,10 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.network.TransformerService;
 import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
 import com.aiyamamoto.transforemerapp.utils.AppUtils;
 import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,17 +26,56 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements TransformersListFragment.TransformersListFragmentListener,
         CreateTransformerFragment.CreateTransformerFragmentListner{
 
-    Callback<TransformerResponse> createTransforCallback;
-    FloatingActionButton fab;
+    private final String CREATE_TRANSFORMER_FRAGMENT = "create_transformer_fragment";
+    private final String BATTLE_FRAGMENT = "battle_fragment";
 
+//    public static  ArrayList<TransformerResponse> autobotsList;
+//    public static ArrayList<TransformerResponse> decepticonsList;
+
+    public static  ArrayList<Transformer> autobotsList;
+    public static ArrayList<Transformer> decepticonsList;
+
+    private FloatingActionButton fab;
+    private FloatingActionButton fabBattle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setFab();
         AppUtils.navigateToFragment(getSupportFragmentManager(), TransformersListFragment.newInstance());
     }
+
+    private void setFab() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fabBattle = (FloatingActionButton) findViewById(R.id.fab_battle);
+        fab.setOnClickListener(mOnClickListener);
+        fab.setVisibility(View.VISIBLE);
+        fabBattle.setOnClickListener(mOnClickListener);
+        fabBattle.setVisibility(View.VISIBLE);
+    }
+
+    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.fab:
+                    AppUtils.addToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance(), CREATE_TRANSFORMER_FRAGMENT);
+                    fab.setVisibility(View.INVISIBLE);
+                    fabBattle.setVisibility(View.INVISIBLE);
+                    break;
+                case R.id.fab_battle:
+                    AppUtils.addToFragment(getSupportFragmentManager(),BattleFragment.newInstance(), BATTLE_FRAGMENT);
+                    fab.setVisibility(View.INVISIBLE);
+                    fabBattle.setVisibility(View.INVISIBLE);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,22 +101,30 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = AppUtils.findFragmentByTag(getSupportFragmentManager(), "create_transformer_fragment");
-        AppUtils.removeFragment(getSupportFragmentManager(), fragment);
+
+        Fragment fragment = AppUtils.findFragmentByTag(getSupportFragmentManager(), BATTLE_FRAGMENT);
+
+        if (fragment == null) {
+            fragment = AppUtils.findFragmentByTag(getSupportFragmentManager(), CREATE_TRANSFORMER_FRAGMENT);
+        }
+        if(fragment != null) {
+            fab.setVisibility(View.VISIBLE);
+            fabBattle.setVisibility(View.VISIBLE);
+            AppUtils.removeFragment(getSupportFragmentManager(), fragment);
+        }
     }
 
     @Override
-    public void addCreateTransformerFragment() {
-        AppUtils.addToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance(), "create_transformer_fragment");
-    }
-
-    @Override
-    public void editTransformer(TransformerResponse transformerResponse) {
-        AppUtils.addToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance(transformerResponse), "create_transformer_fragment");
+    public void editTransformer(Transformer transformer) {
+        AppUtils.addToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance(transformer), CREATE_TRANSFORMER_FRAGMENT);
+        fab.setVisibility(View.GONE);
+        fabBattle.setVisibility(View.GONE);
     }
 
     @Override
     public void backToTransformerListFragment() {
+        fab.setVisibility(View.VISIBLE);
+        fabBattle.setVisibility(View.VISIBLE);
         AppUtils.navigateToFragment(getSupportFragmentManager(),TransformersListFragment.newInstance());
     }
 }

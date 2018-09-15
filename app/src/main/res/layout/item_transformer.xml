@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="java.lang.Integer" />
+
         <variable
             name="item"
             type="com.aiyamamoto.transforemerapp.model.Transformer"/>
-        <variable
-            name="value"
-            type="com.aiyamamoto.transforemerapp.network.response.TransformerResponse"/>
+        <!--<variable-->
+            <!--name="value"-->
+            <!--type="com.aiyamamoto.transforemerapp.network.response.TransformerResponse"/>-->
     </data>
 
     <android.support.v7.widget.CardView
@@ -108,7 +110,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_toRightOf="@+id/strength"
-                            android:text="@{item.strength}" />
+                            android:text="@{Integer.toString(item.strength)}" />
 
                         <SeekBar
                             android:id="@+id/seekBar_strength"
@@ -116,7 +118,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_below="@+id/strength"
-                            android:progress="@{value.strength}"
+                            android:progress="@{item.strength}"
                             android:max="10"/>
 
                         <TextView
@@ -133,7 +135,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/seekBar_strength"
                             android:layout_toRightOf="@+id/intelligence"
-                            android:text="@{item.intelligence}" />
+                            android:text="@{Integer.toString(item.intelligence)}" />
 
                         <SeekBar
                             android:id="@+id/seekBar_intelligence"
@@ -141,7 +143,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/intelligence"
                             android:layout_alignParentLeft="true"
-                            android:progress="@{value.intelligence}"
+                            android:progress="@{item.intelligence}"
                             android:max="10"/>
 
                         <TextView
@@ -158,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/seekBar_intelligence"
                             android:layout_toRightOf="@+id/speed"
-                            android:text="@{item.speed}" />
+                            android:text="@{Integer.toString(item.speed)}" />
 
                         <SeekBar
                             android:id="@+id/seekBar_speed"
@@ -167,7 +169,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_below="@+id/speed"
                             android:max="10"
-                            android:progress="@{value.speed}" />
+                            android:progress="@{item.speed}" />
 
                         <TextView
                             android:id="@+id/endurance"
@@ -183,7 +185,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/seekBar_speed"
                             android:layout_toRightOf="@+id/endurance"
-                            android:text="@{item.endurance}" />
+                            android:text="@{Integer.toString(item.endurance)}" />
 
                         <SeekBar
                             android:id="@+id/seekBar_endurance"
@@ -191,7 +193,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/endurance"
                             android:layout_alignParentLeft="true"
-                            android:progress="@{value.endurance}"
+                            android:progress="@{item.endurance}"
                             android:max="10"/>
 
                     </RelativeLayout>
@@ -220,7 +222,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_toRightOf="@+id/rank"
-                            android:text="@{item.rank}" />
+                            android:text="@{Integer.toString(item.rank)}" />
 
                         <SeekBar
                             android:id="@+id/seekBar_rank"
@@ -228,7 +230,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/rank"
                             android:layout_alignParentLeft="true"
-                            android:progress="@{value.rank}"
+                            android:progress="@{item.rank}"
                             android:max="10"/>
 
                         <TextView
@@ -245,7 +247,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/seekBar_rank"
                             android:layout_toRightOf="@+id/courage"
-                            android:text="@{item.courage}" />
+                            android:text="@{Integer.toString(item.courage)}" />
 
                         <SeekBar
                             android:id="@+id/seekBar_courage"
@@ -253,7 +255,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/courage"
                             android:layout_alignParentLeft="true"
-                            android:progress="@{value.courage}"
+                            android:progress="@{item.courage}"
                             android:max="10"/>
 
                         <TextView
@@ -270,7 +272,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/seekBar_courage"
                             android:layout_toRightOf="@+id/firepower"
-                            android:text="@{item.firepower}" />
+                            android:text="@{Integer.toString(item.firepower)}" />
 
                         <SeekBar
                             android:id="@+id/seekBar_firepower"
@@ -278,7 +280,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/firepower"
                             android:layout_alignParentLeft="true"
-                            android:progress="@{value.firepower}"
+                            android:progress="@{item.firepower}"
                             android:max="10"/>
 
                         <TextView
@@ -295,7 +297,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/seekBar_firepower"
                             android:layout_toRightOf="@+id/skill"
-                            android:text="@{item.skill}" />
+                            android:text="@{Integer.toString(item.skill)}" />
 
                         <SeekBar
                             android:id="@+id/seekBar_skill"
@@ -303,7 +305,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/skill"
                             android:layout_alignParentLeft="true"
-                            android:progress="@{value.skill}"
+                            android:progress="@{item.skill}"
                             android:max="10"/>
 
                     </RelativeLayout>

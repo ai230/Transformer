@@ -1,26 +1,28 @@
 package com.aiyamamoto.transforemerapp.model;
 
+import java.io.Serializable;
+
 /**
  * Created by aiyamamoto on 2018-09-13.
  */
 
-public class Transformer {
+public class Transformer implements Serializable{
     private String id;
     private String name;
-    private String strength;
-    private String intelligence;
-    private String speed;
-    private String endurance;
-    private String rank;
-    private String courage;
-    private String firepower;
-    private String skill;
+    private int strength;
+    private int intelligence;
+    private int speed;
+    private int endurance;
+    private int rank;
+    private int courage;
+    private int firepower;
+    private int skill;
     private String team; // "A" or "D"
     private String team_icon;
 
     private String overAllRating;
 
-    public Transformer(String id, String name, String strength, String intelligence, String speed, String endurance, String rank, String courage, String firepower, String skill, String team, String team_icon) {
+    public Transformer(String id, String name, int strength, int intelligence, int speed, int endurance, int rank, int courage, int firepower, int skill, String team, String team_icon) {
         this.id = id;
         this.name = name;
         this.strength = strength;
@@ -43,35 +45,35 @@ public class Transformer {
         return name;
     }
 
-    public String getStrength() {
+    public int getStrength() {
         return strength;
     }
 
-    public String getIntelligence() {
+    public int getIntelligence() {
         return intelligence;
     }
 
-    public String getSpeed() {
+    public int getSpeed() {
         return speed;
     }
 
-    public String getEndurance() {
+    public int getEndurance() {
         return endurance;
     }
 
-    public String getRank() {
+    public int getRank() {
         return rank;
     }
 
-    public String getCourage() {
+    public int getCourage() {
         return courage;
     }
 
-    public String getFirepower() {
+    public int getFirepower() {
         return firepower;
     }
 
-    public String getSkill() {
+    public int getSkill() {
         return skill;
     }
 

@@ -13,10 +13,16 @@ import android.widget.Toast;
 
 import com.aiyamamoto.transforemerapp.base.BaseFragment;
 import com.aiyamamoto.transforemerapp.databinding.FragmentTransformersListBinding;
+import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.model.TransformersList;
 import com.aiyamamoto.transforemerapp.network.TransformerService;
 import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
 import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,13 +59,8 @@ public class TransformersListFragment extends BaseFragment implements Transforme
     }
 
     @Override
-    public void editTransformer(TransformerResponse transformerResponse) {
+    public void editTransformer(Transformer transformerResponse) {
         transformersListFragmentListener.editTransformer(transformerResponse);
-    }
-
-    public interface TransformersListFragmentListener {
-        void addCreateTransformerFragment();
-        void editTransformer(TransformerResponse transformerResponse);
     }
 
     private Callback<Void> deleteTransformerCallback = new Callback<Void>() {
@@ -104,27 +105,10 @@ public class TransformersListFragment extends BaseFragment implements Transforme
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_transformers_list, container, false);
-        mBinding.fab.setOnClickListener(mOnClickListener);
-        mBinding.fab.setVisibility(View.VISIBLE);
         findToken();
         initTransformerListRecycler();
         return mBinding.getRoot();
     }
-
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.fab:
-                    transformersListFragmentListener.addCreateTransformerFragment();
-                    mBinding.fab.setVisibility(View.INVISIBLE);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    };
 
     private void initTransformerListRecycler() {
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -178,7 +162,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
                 switch (response.code()) {
                     case 200:
                         TransformersList transformersList = response.body();
-                        mTransformersListAdapter = new TransformersListAdapter(getActivity(), callback, transformersList);
+                        mTransformersListAdapter = new TransformersListAdapter(getActivity(), callback, setOrderTransformerList(transformersList));
                         mBinding.recyclerView.setAdapter(mTransformersListAdapter);
                         break;
                     case 401:
@@ -197,6 +181,52 @@ public class TransformersListFragment extends BaseFragment implements Transforme
         });
     }
 
+    private ArrayList<Transformer> setOrderTransformerList(TransformersList list) {
+
+        ArrayList<TransformerResponse> transformerResponseList = list.getTransformers();
+        MainActivity.autobotsList = new ArrayList<>();
+        MainActivity.decepticonsList = new ArrayList<>();
+
+        for (int i=0; i < transformerResponseList.size(); i++) {
+            Transformer transformer = new Transformer(transformerResponseList.get(i).getId(),
+                    transformerResponseList.get(i).getName(),
+                    transformerResponseList.get(i).getStrength(),
+                    transformerResponseList.get(i).getIntelligence(),
+                    transformerResponseList.get(i).getSpeed(),
+                    transformerResponseList.get(i).getEndurance(),
+                    transformerResponseList.get(i).getRank(),
+                    transformerResponseList.get(i).getCourage(),
+                    transformerResponseList.get(i).getFirepower(),
+                    transformerResponseList.get(i).getSkill(),
+                    transformerResponseList.get(i).getTeam(),
+                    transformerResponseList.get(i).getTeam_icon());
+            if (transformerResponseList.get(i).getTeam().equals("A")) {
+                MainActivity.autobotsList.add(transformer);
+            } else {
+                MainActivity.decepticonsList.add(transformer);
+            }
+        }
+
+        // sort by rank
+        Collections.sort(MainActivity.autobotsList, new Comparator<Transformer>() {
+            @Override
+            public int compare(Transformer o1, Transformer o2) {
+                return o1.getRank() - o2.getRank();
+            }
+        });
+        Collections.sort(MainActivity.decepticonsList, new Comparator<Transformer>() {
+            @Override
+            public int compare(Transformer o1, Transformer o2) {
+                return o1.getRank() - o2.getRank();
+            }
+        });
+        ArrayList<Transformer> newList = new ArrayList<>();
+        newList.addAll(MainActivity.autobotsList);
+        newList.addAll(MainActivity.decepticonsList);
+
+        return newList;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -211,4 +241,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
         transformersListFragmentListener = null;
     }
 
+    public interface TransformersListFragmentListener {
+        void editTransformer(Transformer transformerResponse);
+    }
 }
