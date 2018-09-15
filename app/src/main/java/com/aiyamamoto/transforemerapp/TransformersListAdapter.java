@@ -2,15 +2,26 @@ package com.aiyamamoto.transforemerapp;
 
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aiyamamoto.transforemerapp.databinding.ItemTransformerBinding;
+import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.model.TransformersList;
 import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -41,9 +52,44 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        TransformerResponse mTransformer = (TransformerResponse) mTransforemerList.get(position);
+        TransformerResponse mTransformerResponse = (TransformerResponse) mTransforemerList.get(position);
+        Transformer mTransformer = new Transformer(
+                mTransformerResponse.getId(),
+                mTransformerResponse.getName(),
+                String.valueOf(mTransformerResponse.getStrength()),
+                String.valueOf(mTransformerResponse.getIntelligence()),
+                String.valueOf(mTransformerResponse.getSpeed()),
+                String.valueOf(mTransformerResponse.getEndurance()),
+                String.valueOf(mTransformerResponse.getRank()),
+                String.valueOf(mTransformerResponse.getCourage()),
+                String.valueOf(mTransformerResponse.getFirepower()),
+                String.valueOf(mTransformerResponse.getSkill()),
+                mTransformerResponse.getTeam(),
+                mTransformerResponse.getTeam_icon());
+
+        mTransformer.setOverAllRating(String.valueOf(calOverAllRating(mTransformerResponse)));
         ItemTransformersListHolder itemTransformersListHolder = (ItemTransformersListHolder) holder;
+        Picasso.get().load(mTransformer.getTeam_icon()).into(itemTransformersListHolder.binding.teamIconImageview);
         itemTransformersListHolder.binding.setItem(mTransformer);
+        itemTransformersListHolder.binding.setValue(mTransformerResponse);
+        itemTransformersListHolder.binding.seekBarStrength.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        itemTransformersListHolder.binding.seekBarIntelligence.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        itemTransformersListHolder.binding.seekBarSpeed.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
 
     @Override
@@ -88,8 +134,12 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
             binding = DataBindingUtil.bind(itemView);
             binding.cardLayout.setOnClickListener(mOnClickListener);
             binding.cardLayout.setOnLongClickListener(mOnLongClickListener);
-//            binding.button.setOnClickListener(mOnClickListener);
-//            binding.name.setText();
         }
     }
+
+    private int calOverAllRating(TransformerResponse tf) {
+        return tf.getStrength() + tf.getIntelligence() + tf.getSpeed() + tf.getEndurance() + tf.getFirepower();
+    };
+
+
 }

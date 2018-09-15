@@ -107,4 +107,7 @@ public class TransformerResponse {
         return skill;
     }
 
+    public String getTeam_icon() {
+        return team_icon;
+    }
 }

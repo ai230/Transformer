@@ -5,22 +5,26 @@ package com.aiyamamoto.transforemerapp.model;
  */
 
 public class Transformer {
-    private int id;
+    private String id;
     private String name;
-    private int strength;
-    private int intelligence;
-    private int speed;
-    private int endurance;
-    private int rank;
-    private int courage;
-    private int firepower;
-    private int skill;
+    private String strength;
+    private String intelligence;
+    private String speed;
+    private String endurance;
+    private String rank;
+    private String courage;
+    private String firepower;
+    private String skill;
     private String team; // "A" or "D"
     private String team_icon;
 
-    public Transformer(int id, String name, int speed, int endurance, int rank, int courage, int firepower, int skill, String team) {
+    private String overAllRating;
+
+    public Transformer(String id, String name, String strength, String intelligence, String speed, String endurance, String rank, String courage, String firepower, String skill, String team, String team_icon) {
         this.id = id;
         this.name = name;
+        this.strength = strength;
+        this.intelligence = intelligence;
         this.speed = speed;
         this.endurance = endurance;
         this.rank = rank;
@@ -28,9 +32,10 @@ public class Transformer {
         this.firepower = firepower;
         this.skill = skill;
         this.team = team;
+        this.team_icon = team_icon;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -38,35 +43,35 @@ public class Transformer {
         return name;
     }
 
-    public int getStrength() {
+    public String getStrength() {
         return strength;
     }
 
-    public int getIntelligence() {
+    public String getIntelligence() {
         return intelligence;
     }
 
-    public int getSpeed() {
+    public String getSpeed() {
         return speed;
     }
 
-    public int getEndurance() {
+    public String getEndurance() {
         return endurance;
     }
 
-    public int getRank() {
+    public String getRank() {
         return rank;
     }
 
-    public int getCourage() {
+    public String getCourage() {
         return courage;
     }
 
-    public int getFirepower() {
+    public String getFirepower() {
         return firepower;
     }
 
-    public int getSkill() {
+    public String getSkill() {
         return skill;
     }
 
@@ -74,11 +79,16 @@ public class Transformer {
         return team;
     }
 
-    public void setTeam_icon(String team_icon) {
-        this.team_icon = team_icon;
-    }
-
     public String getTeam_icon() {
         return team_icon;
     }
+
+    public String getOverAllRating() {
+        return overAllRating;
+    }
+
+    public void setOverAllRating(String overAllRating) {
+        this.overAllRating = overAllRating;
+    }
 }
+
