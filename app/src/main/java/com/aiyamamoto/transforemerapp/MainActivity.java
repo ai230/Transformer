@@ -8,20 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.aiyamamoto.transforemerapp.model.Transformer;
-import com.aiyamamoto.transforemerapp.network.TransformerService;
-import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
 import com.aiyamamoto.transforemerapp.utils.AppUtils;
-import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements TransformersListFragment.TransformersListFragmentListener,
         CreateTransformerFragment.CreateTransformerFragmentListner{
@@ -66,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
                     fabBattle.setVisibility(View.INVISIBLE);
                     break;
                 case R.id.fab_battle:
-                    AppUtils.addToFragment(getSupportFragmentManager(),BattleFragment.newInstance(), BATTLE_FRAGMENT);
+                    AppUtils.addToFragment(getSupportFragmentManager(), BattleFragmentList.newInstance(), BATTLE_FRAGMENT);
                     fab.setVisibility(View.INVISIBLE);
                     fabBattle.setVisibility(View.INVISIBLE);
                     break;

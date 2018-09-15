@@ -20,7 +20,10 @@ public class Transformer implements Serializable{
     private String team; // "A" or "D"
     private String team_icon;
 
-    private String overAllRating;
+    private int overallRating;
+
+//    private int result; // noresult:0 win:1 lose:2 tie:3
+    private String result; // noresult:0 win:1 lose:2 tie:3
 
     public Transformer(String id, String name, int strength, int intelligence, int speed, int endurance, int rank, int courage, int firepower, int skill, String team, String team_icon) {
         this.id = id;
@@ -85,12 +88,28 @@ public class Transformer implements Serializable{
         return team_icon;
     }
 
-    public String getOverAllRating() {
-        return overAllRating;
+    public int getOverallRating() {
+        return overallRating;
     }
 
-    public void setOverAllRating(String overAllRating) {
-        this.overAllRating = overAllRating;
+    public void setOverallRating(int overallRating) {
+        this.overallRating = overallRating;
     }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    //    public void setResult(int result) {
+//        this.result = result;
+//    }
+//
+//    public int getResult() {
+//        return result;
+//    }
 }
 

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/margin_large">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:text="Result"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_large"/>
+
+        <TextView
+            android:id="@+id/winner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:textSize="@dimen/text_size_medium"
+            android:text="Winner :"/>
+
+        <TextView
+            android:id="@+id/winner_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_toEndOf="@+id/winner"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:textSize="@dimen/text_size_medium"
+            android:text="Autobots"/>
+
+        <TextView
+            android:id="@+id/winner_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_toEndOf="@+id/winner_team"
+            android:textSize="@dimen/text_size_medium"
+            android:text="Eco"/>
+
+        <TextView
+            android:id="@+id/loser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/winner"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:textSize="@dimen/text_size_medium"
+            android:text="Loser :"/>
+
+        <TextView
+            android:id="@+id/loser_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/winner"
+            android:layout_toEndOf="@+id/loser"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:textSize="@dimen/text_size_medium"
+            android:text="Autobots"/>
+
+        <TextView
+            android:id="@+id/loser_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/winner"
+            android:layout_toEndOf="@+id/loser_team"
+            android:textSize="@dimen/text_size_medium"
+            android:text="Eco"/>
+
+        <Button
+            android:id="@+id/backToPre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/backToList"
+            android:background="#000"
+            android:textColor="#fff"
+            android:text="Back to previous page"/>
+
+        <Button
+            android:id="@+id/backToList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="#000"
+            android:textColor="#fff"
+            android:text="Back to transformers list"/>
+
+    </RelativeLayout>
+</layout>

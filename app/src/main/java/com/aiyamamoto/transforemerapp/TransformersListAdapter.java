@@ -44,7 +44,7 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Transformer mTransformer = (Transformer) mTransforemerList.get(position);
 
-        mTransformer.setOverAllRating(String.valueOf(calOverAllRating(mTransformer)));
+        mTransformer.setOverallRating(calOverallRating(mTransformer));
         ItemTransformersListHolder itemTransformersListHolder = (ItemTransformersListHolder) holder;
         Picasso.get().load(mTransformer.getTeam_icon()).into(itemTransformersListHolder.binding.teamIconImageview);
         itemTransformersListHolder.binding.setItem(mTransformer);
@@ -105,7 +105,7 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    private int calOverAllRating(Transformer tf) {
+    private int calOverallRating(Transformer tf) {
         return tf.getStrength() + tf.getIntelligence() + tf.getSpeed() + tf.getEndurance() + tf.getFirepower();
     };
 

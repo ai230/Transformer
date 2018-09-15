@@ -8,9 +8,7 @@
         <variable
             name="item"
             type="com.aiyamamoto.transforemerapp.model.Transformer"/>
-        <!--<variable-->
-            <!--name="value"-->
-            <!--type="com.aiyamamoto.transforemerapp.network.response.TransformerResponse"/>-->
+
     </data>
 
     <android.support.v7.widget.CardView
@@ -43,11 +41,11 @@
                 android:layout_below="@+id/overall_rating_title"
                 android:layout_alignParentRight="true"
                 android:textSize="@dimen/text_size_medium"
-                android:background="@drawable/circle_bg"
+                android:background="@drawable/circle_bg_pink"
                 android:textColor="#fff"
                 android:textAlignment="center"
                 android:gravity="center"
-                android:text="@{item.overAllRating}" />
+                android:text="@{Integer.toString(item.overallRating)}" />
 
             <ImageView
                 android:id="@+id/team_icon_imageview"

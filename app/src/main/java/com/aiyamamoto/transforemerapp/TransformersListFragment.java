@@ -211,13 +211,13 @@ public class TransformersListFragment extends BaseFragment implements Transforme
         Collections.sort(MainActivity.autobotsList, new Comparator<Transformer>() {
             @Override
             public int compare(Transformer o1, Transformer o2) {
-                return o1.getRank() - o2.getRank();
+                return o2.getRank() - o1.getRank();
             }
         });
         Collections.sort(MainActivity.decepticonsList, new Comparator<Transformer>() {
             @Override
             public int compare(Transformer o1, Transformer o2) {
-                return o1.getRank() - o2.getRank();
+                return o2.getRank() - o1.getRank();
             }
         });
         ArrayList<Transformer> newList = new ArrayList<>();
