@@ -260,6 +260,8 @@ public class CreateTransformerFragment extends BaseFragment {
         mBinding.seekBarFirepower.setProgress(mTransformer.getFirepower());
         mBinding.skillTextview.setText("Skill " + mTransformer.getSkill());
         mBinding.seekBarSkill.setProgress(mTransformer.getSkill());
+
+        mBinding.createTransformerBtn.setText("Update Transformer");
     }
 
     @Override
