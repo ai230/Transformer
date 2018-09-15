@@ -9,25 +9,26 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.aiyamamoto.transforemerapp.model.Result;
 import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.utils.AppUtils;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements TransformersListFragment.TransformersListFragmentListener,
-        CreateTransformerFragment.CreateTransformerFragmentListner{
+public class MainActivity extends AppCompatActivity implements TransformersListFragment.OnFragmentInteractionListener,
+        CreateTransformerFragment.OnFragmentInteractionListener, BattleListFragment.OnFragmentInteractionListener, ResultFragment.OnFragmentInteractionListener {
 
+    // tag for fragments
     private final String CREATE_TRANSFORMER_FRAGMENT = "create_transformer_fragment";
     private final String BATTLE_FRAGMENT = "battle_fragment";
-
-//    public static  ArrayList<TransformerResponse> autobotsList;
-//    public static ArrayList<TransformerResponse> decepticonsList;
+    private final String RESULT_FRAGMENT = "result_fragment";
 
     public static  ArrayList<Transformer> autobotsList;
     public static ArrayList<Transformer> decepticonsList;
 
     private FloatingActionButton fab;
     private FloatingActionButton fabBattle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
                     fabBattle.setVisibility(View.INVISIBLE);
                     break;
                 case R.id.fab_battle:
-                    AppUtils.addToFragment(getSupportFragmentManager(), BattleFragmentList.newInstance(), BATTLE_FRAGMENT);
+                    AppUtils.addToFragment(getSupportFragmentManager(), BattleListFragment.newInstance(), BATTLE_FRAGMENT);
                     fab.setVisibility(View.INVISIBLE);
                     fabBattle.setVisibility(View.INVISIBLE);
                     break;
@@ -67,6 +68,29 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
             }
         }
     };
+
+    /* remove all fragments to be back to TransformersListFragment
+    * */
+    private void navigateToTransformerListFragment() {
+        Fragment rf = AppUtils.findFragmentByTag(getSupportFragmentManager(), RESULT_FRAGMENT);
+        if (rf != null) {
+            AppUtils.removeFragment(getSupportFragmentManager(), rf);
+        }
+
+        Fragment bf = AppUtils.findFragmentByTag(getSupportFragmentManager(), BATTLE_FRAGMENT);
+        if (bf != null) {
+            AppUtils.removeFragment(getSupportFragmentManager(), bf);
+        }
+
+        Fragment cf = AppUtils.findFragmentByTag(getSupportFragmentManager(), CREATE_TRANSFORMER_FRAGMENT);
+        if (cf != null) {
+            AppUtils.removeFragment(getSupportFragmentManager(), cf);
+        }
+        if(cf != null || bf != null) {
+            fab.setVisibility(View.VISIBLE);
+            fabBattle.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,21 +114,7 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-
-        Fragment fragment = AppUtils.findFragmentByTag(getSupportFragmentManager(), BATTLE_FRAGMENT);
-
-        if (fragment == null) {
-            fragment = AppUtils.findFragmentByTag(getSupportFragmentManager(), CREATE_TRANSFORMER_FRAGMENT);
-        }
-        if(fragment != null) {
-            fab.setVisibility(View.VISIBLE);
-            fabBattle.setVisibility(View.VISIBLE);
-            AppUtils.removeFragment(getSupportFragmentManager(), fragment);
-        }
-    }
-
+    // TransformerListFragment
     @Override
     public void editTransformer(Transformer transformer) {
         AppUtils.addToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance(transformer), CREATE_TRANSFORMER_FRAGMENT);
@@ -112,10 +122,50 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
         fabBattle.setVisibility(View.GONE);
     }
 
+    // CreateTransformerFragment
+    // ResultFragment
     @Override
     public void backToTransformerListFragment() {
-        fab.setVisibility(View.VISIBLE);
-        fabBattle.setVisibility(View.VISIBLE);
-        AppUtils.navigateToFragment(getSupportFragmentManager(),TransformersListFragment.newInstance());
+        navigateToTransformerListFragment();
     }
+
+    // BattleListFragment
+    @Override
+    public void navigateToResult(Result result) {
+        AppUtils.addToFragment(getSupportFragmentManager(), ResultFragment.newInstance(), RESULT_FRAGMENT);
+    }
+
+    // ResultFragment
+    @Override
+    public void backToBattleListFragment() {
+        navigateToTransformerListFragment();
+    }
+
+    // when device back button is clicked
+    @Override
+    public void onBackPressed() {
+        // ResultFragment to BattleListFragment
+        Fragment rf = AppUtils.findFragmentByTag(getSupportFragmentManager(), RESULT_FRAGMENT);
+        if (rf != null) {
+            AppUtils.removeFragment(getSupportFragmentManager(), rf);
+        } else {
+            // BattleListFragment to TransformersListFragment
+            Fragment bf = AppUtils.findFragmentByTag(getSupportFragmentManager(), BATTLE_FRAGMENT);
+            if (bf != null) {
+                AppUtils.removeFragment(getSupportFragmentManager(), bf);
+            }
+
+            // CreateTransformerFragment to TransformersListFragment
+            Fragment cf = AppUtils.findFragmentByTag(getSupportFragmentManager(), CREATE_TRANSFORMER_FRAGMENT);
+            if (cf != null) {
+                AppUtils.removeFragment(getSupportFragmentManager(), cf);
+            }
+            if(cf != null || bf != null) {
+                // on TransformerListFragment
+                fab.setVisibility(View.VISIBLE);
+                fabBattle.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
 }
