@@ -40,7 +40,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
     private FragmentTransformersListBinding mBinding;
     private TransformersListAdapter mTransformersListAdapter;
 
-    TransformersListFragmentListener transformersListFragmentListener;
+    OnFragmentInteractionListener mListener;
 
     @Override
     public void deleteTransformer(final String transformerId, String name) {
@@ -60,7 +60,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
 
     @Override
     public void editTransformer(Transformer transformerResponse) {
-        transformersListFragmentListener.editTransformer(transformerResponse);
+        mListener.editTransformer(transformerResponse);
     }
 
     private Callback<Void> deleteTransformerCallback = new Callback<Void>() {
@@ -117,7 +117,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
 
     private void findToken() {
         getToken(); //TODO dose't need to go through when it came back from deleteing
-        getTrasnformersList(this);
+        getTransformersList(this);
     }
 
     private void setToken(String token) {
@@ -155,7 +155,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
         TransformerService.ACCESS_TOKEN = SharedPreferencesUtils.getToken(getActivity());
     }
 
-    private void getTrasnformersList(final TransformersListAdapter.AdapterCallback callback) {
+    private void getTransformersList(final TransformersListAdapter.AdapterCallback callback) {
         TransformerService.getTransformersList(new Callback<TransformersList>() {
             @Override
             public void onResponse(Call<TransformersList> call, Response<TransformersList> response) {
@@ -230,18 +230,18 @@ public class TransformersListFragment extends BaseFragment implements Transforme
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof TransformersListFragmentListener) {
-            transformersListFragmentListener = (TransformersListFragmentListener) context;
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        transformersListFragmentListener = null;
+        mListener = null;
     }
 
-    public interface TransformersListFragmentListener {
+    public interface OnFragmentInteractionListener {
         void editTransformer(Transformer transformerResponse);
     }
 }

@@ -2,6 +2,7 @@
     <string name="app_name">TransforemerApp</string>
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Optimus_Prime">Optimus Prime</string>
+    <string name="Predaking">Predaking</string>
+
 </resources>

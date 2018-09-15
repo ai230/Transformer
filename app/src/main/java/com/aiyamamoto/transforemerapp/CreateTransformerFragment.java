@@ -37,11 +37,7 @@ public class CreateTransformerFragment extends BaseFragment {
     private static boolean isEdit;
 
     private FragmentCreateTransformerBinding mBinding;
-    private CreateTransformerFragmentListner createTransformerFragmentListner;
-
-    public interface CreateTransformerFragmentListner {
-        void backToTransformerListFragment();
-    }
+    private OnFragmentInteractionListener mListener;
 
     public static CreateTransformerFragment newInstance() {
         CreateTransformerFragment fragment = new CreateTransformerFragment();
@@ -195,7 +191,7 @@ public class CreateTransformerFragment extends BaseFragment {
             public void onResponse(Call<TransformerResponse> call, Response<TransformerResponse> response) {
                 switch (response.code()) {
                     case 201:
-                        createTransformerFragmentListner.backToTransformerListFragment();
+                        mListener.backToTransformerListFragment();
                         break;
                     case 401:
                         showToast("401 Failed to create a Transfermer, Try again.");
@@ -220,7 +216,7 @@ public class CreateTransformerFragment extends BaseFragment {
                 switch (response.code()) {
                     case 200:
                         showToast("Updated.");
-                        createTransformerFragmentListner.backToTransformerListFragment();
+                        mListener.backToTransformerListFragment();
                         break;
 
                     default:
@@ -267,14 +263,18 @@ public class CreateTransformerFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof CreateTransformerFragmentListner) {
-            createTransformerFragmentListner = (CreateTransformerFragmentListner) context;
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        createTransformerFragmentListner = null;
+        mListener = null;
+    }
+
+    public interface OnFragmentInteractionListener {
+        void backToTransformerListFragment();
     }
 }

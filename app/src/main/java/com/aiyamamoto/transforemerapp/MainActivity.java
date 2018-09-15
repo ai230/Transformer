@@ -138,7 +138,11 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
     // ResultFragment
     @Override
     public void backToBattleListFragment() {
-        navigateToTransformerListFragment();
+        // ResultFragment to BattleListFragment
+        Fragment rf = AppUtils.findFragmentByTag(getSupportFragmentManager(), RESULT_FRAGMENT);
+        if (rf != null) {
+            AppUtils.removeFragment(getSupportFragmentManager(), rf);
+        }
     }
 
     // when device back button is clicked

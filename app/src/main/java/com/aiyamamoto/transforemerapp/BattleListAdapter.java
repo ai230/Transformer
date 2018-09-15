@@ -29,10 +29,13 @@ public class BattleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private ArrayList<Transformer> mDecepticons = new ArrayList<>();
     private Activity mActivity;
 
-    public BattleListAdapter(Activity activity, ArrayList<Transformer> autobots, ArrayList<Transformer> decepticons) {
+    private AdapterCallback mAdapterCallback;
+
+    public BattleListAdapter(Activity activity, ArrayList<Transformer> autobots, ArrayList<Transformer> decepticons, AdapterCallback callback) {
         this.mAutobots = autobots;
         this.mDecepticons = decepticons;
         this.mActivity = activity;
+        mAdapterCallback = callback;
     }
 
     @Override
@@ -71,7 +74,9 @@ public class BattleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
 
         } else {
-            if (battleCourage(position)) {
+            if (battleName(position)) {
+                // do something
+            } else if (battleCourage(position)) {
                 setTextViewBg(itemBattleListHolder.binding.autobotsCourage, mAutobots.get(position).getResult(), position);
                 setTextViewBg(itemBattleListHolder.binding.decepticonCourage, mDecepticons.get(position).getResult(), position);
             } else if (battleStrength(position)){
@@ -101,7 +106,52 @@ public class BattleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    // battle ends return ture
+    /** Special rules:
+     * 1. Any Transformer named Optimus Prime or Predaking wins his fight automatically
+     * regardless ofany other criteria
+     *
+     * 2. In the event either of the above face each other (or a duplicate of each other), the game
+     * immediately ends with all competitors destroyed
+     * @param position
+     * @return Battle ends return true, Otherwise return false
+     */
+    private boolean battleName(int position) {
+        String autobotName = mAutobots.get(position).getName();
+        String decepticonName = mDecepticons.get(position).getName();
+
+        // at first check their name are not special name
+        if (!autobotName.equals(R.string.Optimus_Prime) && !decepticonName.equals(R.string.Predaking)) {
+            return false;
+        } else {
+            if (autobotName.equals(R.string.Optimus_Prime) && decepticonName.equals(R.string.Predaking)) {
+                // Special rule2
+                return true;
+            } else {
+                // Special rule1
+                if (autobotName.equals(R.string.Optimus_Prime)) {
+                    mAutobots.get(position).setResult(WIN);
+                    mDecepticons.get(position).setResult(LOSE);
+                    return true;
+                } else if (decepticonName.equals(R.string.Predaking)) {
+                    mAutobots.get(position).setResult(LOSE);
+                    mDecepticons.get(position).setResult(WIN);
+                    return true;
+                } else {
+                    //
+                    return false;
+                }
+            }
+        }
+    }
+
+    // TODO this function beed to be changed
+    /** Battle rule 1:
+     * If any fighter is down 4 or more points of courage and 3 or more points of strength
+     * compared to their opponent, the opponent automatically wins the face-off regardless of
+     * overall rating (opponent has ran away)
+     * @param position
+     * @return Battle ends return true, Otherwise return false
+     */
     private boolean battleCourage(int position) {
         // chaeck Courage
         int courageResult = mAutobots.get(position).getCourage() - mDecepticons.get(position).getCourage();
@@ -121,7 +171,13 @@ public class BattleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    // battle ends return ture
+    /** Battle rule 1:
+     * If any fighter is down 4 or more points of courage and 3 or more points of strength
+     * compared to their opponent, the opponent automatically wins the face-off regardless of
+     * overall rating (opponent has ran away)
+     * @param position
+     * @return Battle ends return true, Otherwise return false
+     */
     private boolean battleStrength(int position) {
         // chaeck Strength
         int strengthResult = mAutobots.get(position).getStrength() - mDecepticons.get(position).getStrength();
@@ -141,7 +197,12 @@ public class BattleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    // battle ends return ture
+    /** Battle rule 2:
+     * if one of the fighters is 3 or more points of skill above their opponent,
+     * they winthe fight regardless of overall rating
+     * @param position
+     * @return Battle ends return true, Otherwise return false
+     */
     private boolean battleSkill(int position) {
         // chaeck Skill
         int skillResult = mAutobots.get(position).getSkill() - mDecepticons.get(position).getSkill();
@@ -161,7 +222,11 @@ public class BattleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    // battle ends return ture
+    /** Battle rule 3:
+     * the Transformer with the highest overall rating
+     * @param position
+     * @return Battle ends return true, Otherwise return false
+     */
     private boolean battleOverallRating(int position) {
         // chaeck Overall rating
         if (mAutobots.get(position).getOverallRating() > mDecepticons.get(position).getOverallRating()) {
@@ -192,5 +257,9 @@ public class BattleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
         }
+    }
+
+    public interface AdapterCallback {
+        void passingdata();
     }
 }

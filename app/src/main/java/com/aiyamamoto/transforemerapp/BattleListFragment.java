@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 
 import com.aiyamamoto.transforemerapp.base.BaseFragment;
 import com.aiyamamoto.transforemerapp.databinding.FragmentBattleListBinding;
+import com.aiyamamoto.transforemerapp.model.Result;
 import com.aiyamamoto.transforemerapp.model.Transformer;
 
 import java.util.ArrayList;
 
-public class BattleFragmentList extends BaseFragment {
+public class BattleListFragment extends BaseFragment implements BattleListAdapter.AdapterCallback{
 
     private FragmentBattleListBinding mBinding;
 
@@ -23,8 +24,10 @@ public class BattleFragmentList extends BaseFragment {
 
     private BattleListAdapter mBattleListAdapter;
 
-    public static BattleFragmentList newInstance() {
-        BattleFragmentList fragment = new BattleFragmentList();
+    public OnFragmentInteractionListener mListener;
+
+    public static BattleListFragment newInstance() {
+        BattleListFragment fragment = new BattleListFragment();
         return fragment;
     }
 
@@ -35,15 +38,27 @@ public class BattleFragmentList extends BaseFragment {
 
         autobots = MainActivity.autobotsList;
         decepticons = MainActivity.decepticonsList;
+        setListeners();
         findItemSize();
         initRecyclerview();
         return mBinding.getRoot();
     }
 
+    private void setListeners() {
+        mBinding.seeResultBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.navigateToResult(findResult());
+                }
+            }
+        });
+    }
+
     private void initRecyclerview() {
         mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.recyclerView.setHasFixedSize(true);
-        mBattleListAdapter = new BattleListAdapter(getActivity(), autobots, decepticons);
+        mBattleListAdapter = new BattleListAdapter(getActivity(), autobots, decepticons, this);
         mBinding.recyclerView.setAdapter(mBattleListAdapter);
     }
 
@@ -60,14 +75,41 @@ public class BattleFragmentList extends BaseFragment {
             decepticons.add(t);
         }
     }
+
+    private Result findResult() {
+        int numObBattle = autobots.size() < decepticons.size() ? autobots.size() : decepticons.size();
+        String winningTeam = "";
+        String winningTransformer = "";
+        String losingTeam = "";
+        ArrayList<String> survivors = new ArrayList<>();
+
+
+
+        Result result = new Result(numObBattle, winningTeam, winningTransformer,losingTeam, survivors);
+        return result;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
 
+    // AdapterCallback
+    @Override
+    public void passingdata() {
+
+    }
+
+    public interface OnFragmentInteractionListener {
+        void navigateToResult(Result result);
+    }
 }
