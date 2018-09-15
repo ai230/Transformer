@@ -10,6 +10,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -23,6 +24,10 @@ public interface TransformerApi {
 
     @POST("transformers")
     Call<TransformerResponse> createTransformer(@Header("Authorization")String authorization,
+                                                @Body CreateTransformerBody body);
+
+    @PUT("transformers")
+    Call<TransformerResponse> editTransformer(@Header("Authorization")String authorization,
                                                 @Body CreateTransformerBody body);
 
     @GET("transformers")

@@ -22,6 +22,10 @@ public class TransformerService {
         RetrofitBuilder.getTransformerApi().createTransformer("Bearer " + ACCESS_TOKEN, body).enqueue(callback);
     }
 
+    public static void editTransformer(CreateTransformerBody body, Callback<TransformerResponse> callback) {
+        RetrofitBuilder.getTransformerApi().editTransformer("Bearer " + ACCESS_TOKEN, body).enqueue(callback);
+    }
+
     public static void getTransformersList(Callback<TransformersList> callback) {
         RetrofitBuilder.getTransformerApi().getTransformersList("Bearer " + ACCESS_TOKEN).enqueue(callback);
     }

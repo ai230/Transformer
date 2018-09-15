@@ -15,51 +15,56 @@
                 android:padding="@dimen/text_size_small"
                 android:orientation="vertical"
                 android:background="#fff">
-
-                <TextView
-                    android:id="@+id/new_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPink"
-                    android:padding="@dimen/margin_tiny"
-                    android:text="New"/>
-
-                <android.support.design.widget.TextInputLayout
+                <RelativeLayout
+                    android:id="@+id/name_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textInputLayout">
-
-                    <EditText
-                        android:id="@+id/name_edittext"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/new_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPink"
+                        android:layout_alignParentRight="true"
+                        android:padding="@dimen/margin_small"
+                        android:text="New"/>
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Name" />
+                        android:id="@+id/textInputLayout">
 
-                </android.support.design.widget.TextInputLayout>
+                        <EditText
+                            android:id="@+id/name_edittext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Name" />
 
+                    </android.support.design.widget.TextInputLayout>
 
-                <RadioGroup
-                    android:id="@+id/radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_below="@id/textInputLayout">
-
-                    <RadioButton
-                        android:id="@+id/autobots_radio"
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:id="@+id/radio_group"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:value="Autobots"
-                        android:text="Autobots" />
+                        android:orientation="horizontal"
+                        android:layout_below="@id/textInputLayout">
 
-                    <RadioButton
-                        android:id="@+id/decepticon_radio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:value="Decepticon"
-                        android:text="Decepticon" />
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/autobots_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:value="Autobots"
+                            android:text="Autobots"
+                            android:layout_weight="1"/>
+
+                        <RadioButton
+                            android:id="@+id/decepticon_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:value="Decepticon"
+                            android:text="Decepticon"
+                            android:layout_weight="1"/>
+                    </RadioGroup>
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/strength_textview"
@@ -84,7 +89,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:max="10"/>
+
                 <TextView
+                    android:id="@+id/speed_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Speed"/>
@@ -96,6 +103,7 @@
                     android:max="10"/>
 
                 <TextView
+                    android:id="@+id/endurance_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Endurance"/>
@@ -107,6 +115,7 @@
                     android:max="10"/>
 
                 <TextView
+                    android:id="@+id/rank_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rank"/>
@@ -118,6 +127,7 @@
                     android:max="10"/>
 
                 <TextView
+                    android:id="@+id/courage_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Courage"/>
@@ -129,6 +139,7 @@
                     android:max="10"/>
 
                 <TextView
+                    android:id="@+id/firepower_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Firepower"/>
@@ -140,6 +151,7 @@
                     android:max="10"/>
 
                 <TextView
+                    android:id="@+id/skill_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Skill"/>
@@ -160,7 +172,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorBlue"
+            android:textColor="#fff"
+            android:background="#000"
             android:text="Create Transformer"/>
     </RelativeLayout>
 

@@ -3,11 +3,13 @@ package com.aiyamamoto.transforemerapp.network.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by aiyamamoto on 2018-09-13.
  */
 
-public class TransformerResponse {
+public class TransformerResponse implements Serializable {
 
     @SerializedName("id")
     @Expose

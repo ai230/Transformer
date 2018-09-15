@@ -15,6 +15,7 @@ import com.aiyamamoto.transforemerapp.base.BaseFragment;
 import com.aiyamamoto.transforemerapp.databinding.FragmentTransformersListBinding;
 import com.aiyamamoto.transforemerapp.model.TransformersList;
 import com.aiyamamoto.transforemerapp.network.TransformerService;
+import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
 import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
 
 import retrofit2.Call;
@@ -51,8 +52,14 @@ public class TransformersListFragment extends BaseFragment implements Transforme
                 .show();
     }
 
+    @Override
+    public void editTransformer(TransformerResponse transformerResponse) {
+        transformersListFragmentListener.editTransformer(transformerResponse);
+    }
+
     public interface TransformersListFragmentListener {
         void addCreateTransformerFragment();
+        void editTransformer(TransformerResponse transformerResponse);
     }
 
     private Callback<Void> deleteTransformerCallback = new Callback<Void>() {
@@ -140,11 +147,14 @@ public class TransformersListFragment extends BaseFragment implements Transforme
             TransformerService.getAllsparkToken(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
-                    if (response.code() == 200) {
-                        TransformerService.ACCESS_TOKEN = response.body().toString();
-                        setToken(TransformerService.ACCESS_TOKEN);
-                    } else {
-                        Toast.makeText(getActivity(), "Try again", Toast.LENGTH_SHORT).show();
+                    switch (response.code()) {
+                        case 200:
+                            TransformerService.ACCESS_TOKEN = response.body().toString();
+                            setToken(TransformerService.ACCESS_TOKEN);
+                            break;
+                        default:
+                            Toast.makeText(getActivity(), "Try again", Toast.LENGTH_SHORT).show();
+                            break;
                     }
                 }
 
@@ -201,17 +211,4 @@ public class TransformersListFragment extends BaseFragment implements Transforme
         transformersListFragmentListener = null;
     }
 
-    private void showAlertDialog() {
-        new AlertDialog.Builder(getActivity())
-                .setTitle("title")
-                .setMessage("message")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // OK button pressed
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
-    }
 }

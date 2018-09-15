@@ -58,14 +58,18 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Fragment f = AppUtils.findFragmentByTag(getSupportFragmentManager(),"createTFFragment");
-        AppUtils.removeFragment(getSupportFragmentManager(), f);
+        Fragment fragment = AppUtils.findFragmentByTag(getSupportFragmentManager(), "create_transformer_fragment");
+        AppUtils.removeFragment(getSupportFragmentManager(), fragment);
     }
 
     @Override
     public void addCreateTransformerFragment() {
-        AppUtils.navigateToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance());
+        AppUtils.addToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance(), "create_transformer_fragment");
+    }
+
+    @Override
+    public void editTransformer(TransformerResponse transformerResponse) {
+        AppUtils.addToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance(transformerResponse), "create_transformer_fragment");
     }
 
     @Override

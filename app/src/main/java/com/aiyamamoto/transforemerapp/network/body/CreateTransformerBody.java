@@ -9,6 +9,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class CreateTransformerBody {
 
+    @SerializedName("id")
+    @Expose
+    private String id;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -41,7 +45,8 @@ public class CreateTransformerBody {
     @Expose
     private int skill;
 
-    public CreateTransformerBody(String name, String team, int strength, int intelligence, int speed, int endurance, int rank, int courage, int firepower, int skill) {
+    public CreateTransformerBody(String id, String name, String team, int strength, int intelligence, int speed, int endurance, int rank, int courage, int firepower, int skill) {
+        this.id = id;
         this.name = name;
         this.team = team;
         this.strength = strength;
@@ -52,6 +57,10 @@ public class CreateTransformerBody {
         this.courage = courage;
         this.firepower = firepower;
         this.skill = skill;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {

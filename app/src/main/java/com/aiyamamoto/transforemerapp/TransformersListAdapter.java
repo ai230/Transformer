@@ -36,6 +36,7 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public interface AdapterCallback {
         void deleteTransformer(String transformerId, String name);
+        void editTransformer(TransformerResponse transformer);
     }
 
     public TransformersListAdapter(Activity activity, AdapterCallback adapterCallback, TransformersList mTransforemerList) {
@@ -72,24 +73,15 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
         Picasso.get().load(mTransformer.getTeam_icon()).into(itemTransformersListHolder.binding.teamIconImageview);
         itemTransformersListHolder.binding.setItem(mTransformer);
         itemTransformersListHolder.binding.setValue(mTransformerResponse);
-        itemTransformersListHolder.binding.seekBarStrength.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        itemTransformersListHolder.binding.seekBarIntelligence.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        itemTransformersListHolder.binding.seekBarSpeed.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
+        // seekbars to be enable
+        itemTransformersListHolder.binding.seekBarStrength.setEnabled(false);
+        itemTransformersListHolder.binding.seekBarIntelligence.setEnabled(false);
+        itemTransformersListHolder.binding.seekBarSpeed.setEnabled(false);
+        itemTransformersListHolder.binding.seekBarEndurance.setEnabled(false);
+        itemTransformersListHolder.binding.seekBarRank.setEnabled(false);
+        itemTransformersListHolder.binding.seekBarCourage.setEnabled(false);
+        itemTransformersListHolder.binding.seekBarFirepower.setEnabled(false);
+        itemTransformersListHolder.binding.seekBarSkill.setEnabled(false);
     }
 
     @Override
@@ -105,7 +97,7 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.card_layout:
-
+                        mAdapterCallback.editTransformer(mTransforemerList.get(getAdapterPosition()));
                         break;
 
                     default:

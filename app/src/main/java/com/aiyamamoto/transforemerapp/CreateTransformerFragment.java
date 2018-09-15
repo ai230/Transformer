@@ -20,16 +20,8 @@ import retrofit2.Response;
 
 
 public class CreateTransformerFragment extends BaseFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    Callback<TransformerResponse> createTransforCallback;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public static final String EDIT_TRANSFOREMER_KEY = "edit_transformer_key";
 
     private int strengthValue;
     private int intelligenceValue;
@@ -40,6 +32,9 @@ public class CreateTransformerFragment extends BaseFragment {
     private int firepowerValue;
     private int skillValue;
 
+    private TransformerResponse mTransformerResponse;
+    private static boolean isEdit;
+
     private FragmentCreateTransformerBinding mBinding;
     private CreateTransformerFragmentListner createTransformerFragmentListner;
 
@@ -49,14 +44,15 @@ public class CreateTransformerFragment extends BaseFragment {
 
     public static CreateTransformerFragment newInstance() {
         CreateTransformerFragment fragment = new CreateTransformerFragment();
+        isEdit = false;
         return fragment;
     }
 
     public static CreateTransformerFragment newInstance(TransformerResponse transformerResponse) {
         CreateTransformerFragment fragment = new CreateTransformerFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
+        isEdit = true;
+        args.putSerializable(EDIT_TRANSFOREMER_KEY, transformerResponse);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,10 +61,24 @@ public class CreateTransformerFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_transformer, container, false);
+        if (isEdit) {
+            mTransformerResponse = (TransformerResponse) getArguments().getSerializable(EDIT_TRANSFOREMER_KEY);
+            insertData();
+        }
+        setListener();
+        return mBinding.getRoot();
+    }
+
+    private void setListener() {
         mBinding.createTransformerBtn.setOnClickListener(mOnClickListener);
         mBinding.seekBarStrength.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
         mBinding.seekBarIntelligence.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
-        return mBinding.getRoot();
+        mBinding.seekBarSpeed.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
+        mBinding.seekBarEndurance.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
+        mBinding.seekBarRank.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
+        mBinding.seekBarCourage.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
+        mBinding.seekBarFirepower.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
+        mBinding.seekBarSkill.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
     }
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -76,7 +86,11 @@ public class CreateTransformerFragment extends BaseFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.createTransformerBtn:
-                    createTransformer();
+                    if (isEdit) {
+                        editTransformer();
+                    } else {
+                        createTransformer();
+                    }
                     break;
 
                 default:
@@ -100,13 +114,33 @@ public class CreateTransformerFragment extends BaseFragment {
                     break;
 
                 case R.id.seekBar_speed:
-                    mBinding.strengthTextview.setText("Speed " + progress);
+                    mBinding.speedTextview.setText("Speed " + progress);
                     speedValue = progress;
                     break;
 
                 case R.id.seekBar_endurance:
-                    mBinding.intelligenceTextview.setText("Endurance " + progress);
+                    mBinding.enduranceTextview.setText("Endurance " + progress);
                     enduranceValue = progress;
+                    break;
+
+                case R.id.seekBar_rank:
+                    mBinding.rankTextview.setText("Rank " + progress);
+                    rankValue = progress;
+                    break;
+
+                case R.id.seekBar_courage:
+                    mBinding.courageTextview.setText("Courage " + progress);
+                    courageValue = progress;
+                    break;
+
+                case R.id.seekBar_firepower:
+                    mBinding.firepowerTextview.setText("Firepower " + progress);
+                    firepowerValue = progress;
+                    break;
+
+                case R.id.seekBar_skill:
+                    mBinding.skillTextview.setText("Skill " + progress);
+                    skillValue = progress;
                     break;
             }
         }
@@ -124,6 +158,12 @@ public class CreateTransformerFragment extends BaseFragment {
 
     private CreateTransformerBody createTransformerBody() {
 
+        String id = "";
+        if (isEdit) {
+            id = mTransformerResponse.getId();
+        } else {
+            id = "0";
+        }
         String name = mBinding.nameEdittext.getText().toString();
         String team = "";
         if (mBinding.autobotsRadio.isChecked()) {
@@ -131,9 +171,17 @@ public class CreateTransformerFragment extends BaseFragment {
         } else {
             team = "D";
         }
+        strengthValue = mBinding.seekBarStrength.getProgress();
+        intelligenceValue = mBinding.seekBarIntelligence.getProgress();
+        speedValue = mBinding.seekBarSpeed.getProgress();
+        enduranceValue = mBinding.seekBarEndurance.getProgress();
+        rankValue = mBinding.seekBarRank.getProgress();
+        courageValue = mBinding.seekBarCourage.getProgress();
+        firepowerValue = mBinding.seekBarFirepower.getProgress();
+        skillValue = mBinding.seekBarSkill.getProgress();
 
-
-        CreateTransformerBody body = new CreateTransformerBody(name, team,2, 3,4,5,6,7, 10, 9);
+        CreateTransformerBody body = new CreateTransformerBody(
+                id, name, team,strengthValue, intelligenceValue, speedValue,enduranceValue, rankValue, courageValue, firepowerValue, skillValue);
 
         return body;
     }
@@ -160,6 +208,55 @@ public class CreateTransformerFragment extends BaseFragment {
                 showToast("Failed to create a Transfermer, Try again.");
             }
         });
+    }
+
+    private void editTransformer() {
+        TransformerService.editTransformer(createTransformerBody(), new Callback<TransformerResponse>() {
+            @Override
+            public void onResponse(Call<TransformerResponse> call, Response<TransformerResponse> response) {
+                switch (response.code()) {
+                    case 200:
+                        showToast("Updated.");
+                        createTransformerFragmentListner.backToTransformerListFragment();
+                        break;
+
+                    default:
+                        showToast("Failed to create a Transfermer, Try again.");
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TransformerResponse> call, Throwable t) {
+                showToast("Failed to create a Transfermer, Try again.");
+            }
+        });
+    }
+
+    private void insertData() {
+        mBinding.newEdit.setText("Edit");
+        mBinding.nameEdittext.setText(mTransformerResponse.getName());
+        if (mTransformerResponse.getTeam().equals("A")) {
+            mBinding.autobotsRadio.setChecked(true);
+        } else {
+            mBinding.decepticonRadio.setChecked(true);
+        }
+        mBinding.strengthTextview.setText("Strength " + mTransformerResponse.getStrength());
+        mBinding.seekBarStrength.setProgress(mTransformerResponse.getStrength());
+        mBinding.intelligenceTextview.setText("Inteligence " + mTransformerResponse.getIntelligence());
+        mBinding.seekBarIntelligence.setProgress(mTransformerResponse.getIntelligence());
+        mBinding.speedTextview.setText("Speed " + mTransformerResponse.getSpeed());
+        mBinding.seekBarSpeed.setProgress(mTransformerResponse.getSpeed());
+        mBinding.enduranceTextview.setText("Endurance " + mTransformerResponse.getEndurance());
+        mBinding.seekBarEndurance.setProgress(mTransformerResponse.getEndurance());
+        mBinding.rankTextview.setText("Rank " + mTransformerResponse.getRank());
+        mBinding.seekBarRank.setProgress(mTransformerResponse.getRank());
+        mBinding.courageTextview.setText("Courage " + mTransformerResponse.getCourage());
+        mBinding.seekBarCourage.setProgress(mTransformerResponse.getCourage());
+        mBinding.firepowerTextview.setText("Firepower " + mTransformerResponse.getFirepower());
+        mBinding.seekBarFirepower.setProgress(mTransformerResponse.getFirepower());
+        mBinding.skillTextview.setText("Skill " + mTransformerResponse.getSkill());
+        mBinding.seekBarSkill.setProgress(mTransformerResponse.getSkill());
     }
 
     @Override
