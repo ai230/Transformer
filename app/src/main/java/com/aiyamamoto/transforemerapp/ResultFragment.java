@@ -51,9 +51,22 @@ public class ResultFragment extends Fragment {
         if (getArguments() != null) {
             mResult = (Result) getArguments().getSerializable(RESULT_KEY);
         }
-        initData();
+        checkKingsFaced();
         setListeners();
         return mBinding.getRoot();
+    }
+
+    private void checkKingsFaced() {
+        if (mResult.isOptimusAndPredakingFaced()) {
+            mBinding.resultLayout.setVisibility(View.GONE);
+            mBinding.message.setVisibility(View.VISIBLE);
+            mBinding.message.setText("Optimus Prime and Predaking face each other (or a duplicate of each other), the game" +
+                    " immediately ends with all competitors destroyed");
+        } else {
+            mBinding.resultLayout.setVisibility(View.VISIBLE);
+            mBinding.message.setVisibility(View.GONE);
+            initData();
+        }
     }
 
     private void initData() {
@@ -63,16 +76,24 @@ public class ResultFragment extends Fragment {
         StringBuilder survivors = new StringBuilder();
         int count = 0;
         if (mResult != null) {
-            for (String survivor : mResult.getSurvivors()){
-                survivors.append(survivor);
-                if (0 < count) {
-                    survivors.append(", ");
+            if(mResult.getSurvivors().size() == 0) {
+                mBinding.losing .setVisibility(View.INVISIBLE);
+                mBinding.losingSurvivors.setVisibility(View.INVISIBLE);
+            } else {
+                for (String survivor : mResult.getSurvivors()){
+                    if (0 < count) {
+                        survivors.append(", ");
+                    }
+                    survivors.append(survivor);
+                    count++;
                 }
-                count++;
+                mBinding.losing .setVisibility(View.VISIBLE);
+                mBinding.losingSurvivors.setVisibility(View.VISIBLE);
+                mBinding.losingSurvivors.setText(survivors);
             }
+
         }
 
-        mBinding.losingSurvivors.setText(survivors);
     }
 
     private void setListeners() {

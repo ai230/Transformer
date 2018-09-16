@@ -23,75 +23,85 @@
             android:textSize="@dimen/text_size_medium"/>
 
         <TextView
-            android:id="@+id/number_of_battle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_size_small"
-            android:text="@{item.numberObButtle + ` Battle`}"/>
-
-
-        <TextView
-            android:id="@+id/winning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/number_of_battle"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_size_small"
-            android:text="Winning team"/>
-
-        <TextView
-            android:id="@+id/winning_team"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/winning"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_size_small"
-            android:text="@{item.winningTeam}"/>
-
-        <TextView
-            android:id="@+id/winning_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/winning_team"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_size_small"
-            android:text="@{item.winningTransformer}"/>
-
-        <TextView
-            android:id="@+id/losing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/winning_name"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_size_small"
-            android:text="Survivors from losing team : "/>
-
-
-        <TextView
-            android:id="@+id/losing_survivors"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/losing"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_size_small"
-            android:text="Eco"/>
-
-        <TextView
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/losing_survivors"
-            android:text=""
+            android:layout_below="@+id/title"
             android:textAlignment="center"
+            android:visibility="gone"
             android:textSize="@dimen/text_size_small" />
+
+        <RelativeLayout
+            android:id="@+id/result_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title">
+
+            <TextView
+                android:id="@+id/number_of_battle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_small"
+                android:hint="0 battle"
+                android:text="@{item.numberObButtle + ` Battle`}"/>
+
+
+            <TextView
+                android:id="@+id/winning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/number_of_battle"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_small"
+                android:text="Winning team"/>
+
+            <TextView
+                android:id="@+id/winning_team"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/winning"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_small"
+                android:text="@{item.winningTeam}"/>
+
+            <TextView
+                android:id="@+id/winning_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/winning_team"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_small"
+                android:text="@{item.winningTransformer}"/>
+
+            <TextView
+                android:id="@+id/losing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/winning_name"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_small"
+                android:text="Survivors from losing team : "/>
+
+
+            <TextView
+                android:id="@+id/losing_survivors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/losing"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_small"
+                android:text="Eco"/>
+
+        </RelativeLayout>
+
 
         <Button
             android:id="@+id/backToPre"

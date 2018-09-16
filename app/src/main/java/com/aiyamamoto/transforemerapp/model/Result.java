@@ -14,8 +14,10 @@ public class Result implements Serializable{
     private String winningTransformer;
     private ArrayList<String> survivors;
     private String message;
+    private boolean isOptimusAndPredakingFaced;
 
     public Result(){
+        this.isOptimusAndPredakingFaced = false;
         this.numberOfBattle = 0;
         this.winningTeam = "";
         this.winningTransformer = "";
@@ -61,5 +63,13 @@ public class Result implements Serializable{
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean isOptimusAndPredakingFaced() {
+        return isOptimusAndPredakingFaced;
+    }
+
+    public void setOptimusAndPredakingFaced(boolean optimusAndPredakingFaced) {
+        isOptimusAndPredakingFaced = optimusAndPredakingFaced;
     }
 }
