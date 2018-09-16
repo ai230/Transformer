@@ -25,7 +25,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/colorPink"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:padding="@dimen/margin_small"
                         android:text="New"/>
 
@@ -38,6 +38,7 @@
                             android:id="@+id/name_edittext"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="text"
                             android:hint="Name" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -55,7 +56,7 @@
                             android:layout_height="wrap_content"
                             android:checked="true"
                             android:value="Autobots"
-                            android:text="Autobots"
+                            android:text="@string/autobots"
                             android:layout_weight="1"/>
 
                         <RadioButton
@@ -63,7 +64,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:value="Decepticon"
-                            android:text="Decepticon"
+                            android:text="@string/decepticons"
                             android:layout_weight="1"/>
                     </RadioGroup>
                 </RelativeLayout>
@@ -72,99 +73,105 @@
                     android:id="@+id/strength_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Strength"/>
+                    android:text="Strength 1"/>
 
                 <SeekBar
                     android:id="@+id/seekBar_strength"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:progress="1"
                     android:max="10"/>
 
                 <TextView
                     android:id="@+id/intelligence_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Intelligence"/>
+                    android:text="Intelligence 1"/>
 
                 <SeekBar
                     android:id="@+id/seekBar_intelligence"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:progress="1"
                     android:max="10"/>
 
                 <TextView
                     android:id="@+id/speed_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Speed"/>
+                    android:text="Speed 1"/>
 
                 <SeekBar
                     android:id="@+id/seekBar_speed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:progress="1"
                     android:max="10"/>
 
                 <TextView
                     android:id="@+id/endurance_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Endurance"/>
+                    android:text="Endurance 1"/>
 
                 <SeekBar
                     android:id="@+id/seekBar_endurance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:progress="1"
                     android:max="10"/>
 
                 <TextView
                     android:id="@+id/rank_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rank"/>
+                    android:text="Rank 1"/>
 
                 <SeekBar
                     android:id="@+id/seekBar_rank"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:progress="1"
                     android:max="10"/>
 
                 <TextView
                     android:id="@+id/courage_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Courage"/>
+                    android:text="Courage 1"/>
 
                 <SeekBar
                     android:id="@+id/seekBar_courage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:progress="1"
                     android:max="10"/>
 
                 <TextView
                     android:id="@+id/firepower_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Firepower"/>
+                    android:text="Firepower 1"/>
 
                 <SeekBar
                     android:id="@+id/seekBar_firepower"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:progress="1"
                     android:max="10"/>
 
                 <TextView
                     android:id="@+id/skill_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Skill"/>
+                    android:text="Skill 1"/>
 
                 <SeekBar
                     android:id="@+id/seekBar_skill"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:progress="1"
                     android:max="10"/>
-
-
 
             </LinearLayout>
         </ScrollView>
@@ -176,7 +183,7 @@
             android:layout_alignParentBottom="true"
             android:textColor="#fff"
             android:background="#000"
-            android:text="Create Transformer"/>
+            android:text="@string/create_transformer"/>
     </RelativeLayout>
 
 

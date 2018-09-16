@@ -3,6 +3,7 @@ package com.aiyamamoto.transforemerapp;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+/**
+ * A simple {@link Fragment} subclass.
+ * {@link CreateTransformerFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link CreateTransformerFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class CreateTransformerFragment extends BaseFragment {
 
-    public static final String EDIT_TRANSFOREMER_KEY = "edit_transformer_key";
+    public static final String EDIT_TRANSFORMER_KEY = "edit_transformer_key";
 
     private int strengthValue;
     private int intelligenceValue;
@@ -39,17 +46,31 @@ public class CreateTransformerFragment extends BaseFragment {
     private FragmentCreateTransformerBinding mBinding;
     private OnFragmentInteractionListener mListener;
 
+    /**
+     * Use this factory method to create a new instance
+     * of this fragment
+     *
+     * @return A new instance of fragment CreateTransformerFragment.
+     */
     public static CreateTransformerFragment newInstance() {
         CreateTransformerFragment fragment = new CreateTransformerFragment();
         isEdit = false;
         return fragment;
     }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters
+     * to edit existing data
+     *
+     * @param transformer Transformer.
+     * @return A new instance of fragment CreateTransformerFragment.
+     */
     public static CreateTransformerFragment newInstance(Transformer transformer) {
         CreateTransformerFragment fragment = new CreateTransformerFragment();
         Bundle args = new Bundle();
         isEdit = true;
-        args.putSerializable(EDIT_TRANSFOREMER_KEY, transformer);
+        args.putSerializable(EDIT_TRANSFORMER_KEY, transformer);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,7 +81,7 @@ public class CreateTransformerFragment extends BaseFragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_transformer, container, false);
         if (isEdit) {
             if (getArguments() != null) {
-                mTransformer = (Transformer) getArguments().getSerializable(EDIT_TRANSFOREMER_KEY);
+                mTransformer = (Transformer) getArguments().getSerializable(EDIT_TRANSFORMER_KEY);
                 initData();
             }
         }
@@ -85,10 +106,14 @@ public class CreateTransformerFragment extends BaseFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.createTransformerBtn:
-                    if (isEdit) {
-                        editTransformer();
+                    if(mBinding.nameEdittext.getText().toString().isEmpty()) {
+                        showToast(getString(R.string.enter_name_msg));
                     } else {
-                        createTransformer();
+                        if (isEdit) {
+                            editTransformer();
+                        } else {
+                            createTransformer();
+                        }
                     }
                     break;
 
@@ -103,41 +128,73 @@ public class CreateTransformerFragment extends BaseFragment {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             switch (seekBar.getId()) {
                 case R.id.seekBar_strength:
+                    if (progress == 0) {
+                        progress = 1;
+                        mBinding.seekBarStrength.setProgress(progress);
+                    }
                     mBinding.strengthTextview.setText("Strength " + progress);
                     strengthValue = progress;
                     break;
 
                 case R.id.seekBar_intelligence:
+                    if (progress == 0) {
+                        progress = 1;
+                        mBinding.seekBarIntelligence.setProgress(progress);
+                    }
                     mBinding.intelligenceTextview.setText("Intelligence " + progress);
                     intelligenceValue = progress;
                     break;
 
                 case R.id.seekBar_speed:
+                    if (progress == 0) {
+                        progress = 1;
+                        mBinding.seekBarSpeed.setProgress(progress);
+                    }
                     mBinding.speedTextview.setText("Speed " + progress);
                     speedValue = progress;
                     break;
 
                 case R.id.seekBar_endurance:
+                    if (progress == 0) {
+                        progress = 1;
+                        mBinding.seekBarEndurance.setProgress(progress);
+                    }
                     mBinding.enduranceTextview.setText("Endurance " + progress);
                     enduranceValue = progress;
                     break;
 
                 case R.id.seekBar_rank:
+                    if (progress == 0) {
+                        progress = 1;
+                        mBinding.seekBarRank.setProgress(progress);
+                    }
                     mBinding.rankTextview.setText("Rank " + progress);
                     rankValue = progress;
                     break;
 
                 case R.id.seekBar_courage:
+                    if (progress == 0) {
+                        progress = 1;
+                        mBinding.seekBarCourage.setProgress(progress);
+                    }
                     mBinding.courageTextview.setText("Courage " + progress);
                     courageValue = progress;
                     break;
 
                 case R.id.seekBar_firepower:
+                    if (progress == 0) {
+                        progress = 1;
+                        mBinding.seekBarFirepower.setProgress(progress);
+                    }
                     mBinding.firepowerTextview.setText("Firepower " + progress);
                     firepowerValue = progress;
                     break;
 
                 case R.id.seekBar_skill:
+                    if (progress == 0) {
+                        progress = 1;
+                        mBinding.seekBarSkill.setProgress(progress);
+                    }
                     mBinding.skillTextview.setText("Skill " + progress);
                     skillValue = progress;
                     break;
@@ -155,6 +212,13 @@ public class CreateTransformerFragment extends BaseFragment {
         }
     };
 
+
+    /**
+     * To create a new instance of CreateTransformerBody
+     * to HTTP request
+     *
+     * @return A new instance of CreateTransformerBody
+     */
     private CreateTransformerBody createTransformerBody() {
 
         String id = "";
@@ -185,6 +249,12 @@ public class CreateTransformerFragment extends BaseFragment {
         return body;
     }
 
+    /**
+     * This method is to call HTTP POST request
+     * to create new Transformer.
+     *
+     * it will response back an updated TransformerResponse
+     */
     private void createTransformer(){
         TransformerService.createTransformer(createTransformerBody(), new Callback<TransformerResponse>() {
             @Override
@@ -197,18 +267,24 @@ public class CreateTransformerFragment extends BaseFragment {
                         showToast("401 Failed to create a Transfermer, Try again.");
                         break;
                     default:
-                        showToast("Failed to create a Transfermer, Try again.");
+                        showToast(getString(R.string.failed_to_create_msg));
                         break;
                 }
             }
 
             @Override
             public void onFailure(Call<TransformerResponse> call, Throwable t) {
-                showToast("Failed to create a Transfermer, Try again.");
+                showToast(getString(R.string.failed_to_create_msg));
             }
         });
     }
 
+    /**
+     * This method is to call HTTP PUT request
+     * to edit a existing transformer.
+     *
+     * it will response back an updated TransformerResponse
+     */
     private void editTransformer() {
         TransformerService.editTransformer(createTransformerBody(), new Callback<TransformerResponse>() {
             @Override
@@ -220,18 +296,21 @@ public class CreateTransformerFragment extends BaseFragment {
                         break;
 
                     default:
-                        showToast("Failed to create a Transfermer, Try again.");
+                        showToast(getString(R.string.failed_to_create_msg));
                         break;
                 }
             }
 
             @Override
             public void onFailure(Call<TransformerResponse> call, Throwable t) {
-                showToast("Failed to create a Transfermer, Try again.");
+                showToast(getString(R.string.failed_to_create_msg));
             }
         });
     }
 
+    /**
+     * Sets the data to edit existing data.
+     */
     private void initData() {
         mBinding.newEdit.setText("Edit");
         mBinding.nameEdittext.setText(mTransformer.getName());
@@ -274,6 +353,10 @@ public class CreateTransformerFragment extends BaseFragment {
         mListener = null;
     }
 
+    /**
+     * To allow an interaction in this fragment to be communicated
+     * to MainActivity
+     */
     public interface OnFragmentInteractionListener {
         void backToTransformerListFragment();
     }
