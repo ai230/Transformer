@@ -24,8 +24,8 @@ public class BattleListFragment extends BaseFragment {
     private final String SURVIVOR = "SURVIVOR";
     private final String FAKE = "FAKE";
 
-    private final String AUTOBOTS = "Autobots";
-    private final String DECEPTICONS = "Decepticons";
+//    private final String AUTOBOTS = "Autobots";
+//    private final String DECEPTICONS = "Decepticons";
 
     private final String OPTIMUS_PRIME = "Optimus Prime";
     private final String PREDAKING = "Predaking";
@@ -43,6 +43,8 @@ public class BattleListFragment extends BaseFragment {
     private int numberOfBattleWithSkip;
     private ArrayList<String> survivors = new ArrayList<>();
 
+    private boolean isOptimus;
+    private boolean isPredaking;
     public static BattleListFragment newInstance() {
         BattleListFragment fragment = new BattleListFragment();
         return fragment;
@@ -68,7 +70,14 @@ public class BattleListFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    findWinningTeam();
+                    // if find Optimus or Predaking not exist
+                    if(!findWinningTransformer()) {
+                        if (isOptimus || isPredaking) {
+                            findSurvivers();
+                        } else {
+                            findWinningTeam();
+                        }
+                    }
                     mListener.navigateToResult(mResult);
                 }
             }
@@ -99,11 +108,12 @@ public class BattleListFragment extends BaseFragment {
 
     private void battle() {
         for (int position = 0; position < numberOfBattleWithSkip; position++) {
-            BattleResult battleResult = new BattleResult();
+            BattleResult autobotsBattleResult = new BattleResult();
+            BattleResult decepticonsBattleResult = new BattleResult();
             // initialize
-            autobots.get(position).setBattleResult(battleResult);
+            autobots.get(position).setBattleResult(autobotsBattleResult);
             autobots.get(position).setResult("");
-            decepticons.get(position).setBattleResult(battleResult);
+            decepticons.get(position).setBattleResult(decepticonsBattleResult);
             decepticons.get(position).setResult("");
 
             if (autobots.get(position).getId().equals("0") || decepticons.get(position).getId().equals("0")) {
@@ -121,10 +131,10 @@ public class BattleListFragment extends BaseFragment {
                     mResult.setSurvivors(survivors);
                 }
             } else { // battled
-                if (battleName(position, battleResult)) {
-                } else if (battleCourageAndStrength(position, battleResult)) {
-                } else if (battleSkill(position, battleResult)) {
-                } else if (battleOverallRating(position, battleResult)) {
+                if (battleName(position, autobotsBattleResult, decepticonsBattleResult)) {
+                } else if (battleCourageAndStrength(position, autobotsBattleResult, decepticonsBattleResult)) {
+                } else if (battleSkill(position, autobotsBattleResult, decepticonsBattleResult)) {
+                } else if (battleOverallRating(position, autobotsBattleResult, decepticonsBattleResult)) {
                 }
             }
         }
@@ -141,7 +151,7 @@ public class BattleListFragment extends BaseFragment {
      * @param position
      * @return Battle ends return true, Otherwise return false
      */
-    private boolean battleName(int position, BattleResult battleResult) {
+    private boolean battleName(int position, BattleResult autobotsBattleResult,  BattleResult decepticonsBattleResult) {
         String autobotName = autobots.get(position).getName();
         String decepticonName = decepticons.get(position).getName();
 
@@ -159,18 +169,17 @@ public class BattleListFragment extends BaseFragment {
                     autobots.get(position).setResult(WIN);
                     decepticons.get(position).setResult(LOSE);
 
-                    battleResult.setNameWin(true);
-                    autobots.get(position).setBattleResult(battleResult);
+                    autobotsBattleResult.setNameWin(true);
+                    autobots.get(position).setBattleResult(autobotsBattleResult);
                     return true;
                 } else if (decepticonName.equals(PREDAKING)) {
                     autobots.get(position).setResult(LOSE);
                     decepticons.get(position).setResult(WIN);
 
-                    battleResult.setNameWin(true);
-                    decepticons.get(position).setBattleResult(battleResult);
+                    decepticonsBattleResult.setNameWin(true);
+                    decepticons.get(position).setBattleResult(decepticonsBattleResult);
                     return true;
                 } else {
-                    //
                     return false;
                 }
             }
@@ -184,7 +193,7 @@ public class BattleListFragment extends BaseFragment {
      * @param position
      * @return Battle ends return true, Otherwise return false
      */
-    private boolean battleCourageAndStrength(int position, BattleResult battleResult) {
+    private boolean battleCourageAndStrength(int position, BattleResult autobotsBattleResult,  BattleResult decepticonsBattleResult) {
         // check Courage
         int courageResult = autobots.get(position).getCourage() - decepticons.get(position).getCourage();
         int strengthResult = autobots.get(position).getStrength() - decepticons.get(position).getStrength();
@@ -195,16 +204,16 @@ public class BattleListFragment extends BaseFragment {
             autobots.get(position).setResult(WIN);
             decepticons.get(position).setResult(LOSE);
 
-            battleResult.setCourageAndStrengthWin(true);
-            autobots.get(position).setBattleResult(battleResult);
+            autobotsBattleResult.setCourageAndStrengthWin(true);
+            autobots.get(position).setBattleResult(autobotsBattleResult);
             return true;
         } else if (courageResult <= -4 && strengthResult <= -3) {
             //deception lose deception win
             autobots.get(position).setResult(LOSE);
             decepticons.get(position).setResult(WIN);
 
-            battleResult.setCourageAndStrengthWin(true);
-            decepticons.get(position).setBattleResult(battleResult);
+            decepticonsBattleResult.setCourageAndStrengthWin(true);
+            decepticons.get(position).setBattleResult(decepticonsBattleResult);
             return true;
         } else {
             // go next
@@ -218,7 +227,7 @@ public class BattleListFragment extends BaseFragment {
      * @param position
      * @return Battle ends return true, Otherwise return false
      */
-    private boolean battleSkill(int position, BattleResult battleResult) {
+    private boolean battleSkill(int position, BattleResult autobotsBattleResult,  BattleResult decepticonsBattleResult) {
         // check Skill
         int skillResult = autobots.get(position).getSkill() - decepticons.get(position).getSkill();
         if (skillResult >= 3) {
@@ -226,16 +235,16 @@ public class BattleListFragment extends BaseFragment {
             autobots.get(position).setResult(WIN);
             decepticons.get(position).setResult(LOSE);
 
-            battleResult.setSkillWin(true);
-            autobots.get(position).setBattleResult(battleResult);
+            autobotsBattleResult.setSkillWin(true);
+            autobots.get(position).setBattleResult(autobotsBattleResult);
             return true;
         } else if (skillResult <= -3) {
             //deception lose deception win
             autobots.get(position).setResult(LOSE);
             decepticons.get(position).setResult(WIN);
 
-            battleResult.setSkillWin(true);
-            decepticons.get(position).setBattleResult(battleResult);
+            decepticonsBattleResult.setSkillWin(true);
+            decepticons.get(position).setBattleResult(decepticonsBattleResult);
             return true;
         } else {
             // go next
@@ -248,28 +257,73 @@ public class BattleListFragment extends BaseFragment {
      * @param position battleResult
      * @return Battle ends return true, Otherwise return false
      */
-    private boolean battleOverallRating(int position, BattleResult battleResult) {
+    private boolean battleOverallRating(int position, BattleResult autobotsBattleResult,  BattleResult decepticonsBattleResult) {
         // check Overall rating
         if (autobots.get(position).getOverallRating() > decepticons.get(position).getOverallRating()) {
             // autobots win deception lose
             autobots.get(position).setResult(WIN);
             decepticons.get(position).setResult(LOSE);
 
-            battleResult.setOverallRatingWin(true);
-            autobots.get(position).setBattleResult(battleResult);
+            autobotsBattleResult.setOverallRatingWin(true);
+            autobots.get(position).setBattleResult(autobotsBattleResult);
         } else if (autobots.get(position).getOverallRating() < decepticons.get(position).getOverallRating()) {
             //deception lose deception win
             autobots.get(position).setResult(LOSE);
             decepticons.get(position).setResult(WIN);
 
-            battleResult.setOverallRatingWin(true);
-            decepticons.get(position).setBattleResult(battleResult);
+            decepticonsBattleResult.setOverallRatingWin(true);
+            decepticons.get(position).setBattleResult(decepticonsBattleResult);
         } else {
             // tie
             autobots.get(position).setResult(TIE);
             decepticons.get(position).setResult(TIE);
         }
         return true;
+    }
+
+    private boolean findWinningTransformer() {
+        isOptimus = false;
+        isPredaking = false;
+        for (int i=0; i < numberOfBattleWithSkip; i++) {
+            if (autobots.get(i).getBattleResult().isNameWin()) {
+                mResult.setWinningTeam(getString(R.string.autobots));
+                mResult.setWinningTransformer(autobots.get(i).getName());
+                isOptimus = true;
+            }
+            if (decepticons.get(i).getBattleResult().isNameWin()) {
+                isPredaking = true;
+                if (isOptimus) {
+                    mResult.setOptimusAndPredakingFaced(true);
+                    return true;
+                } else {
+                    mResult.setWinningTeam(getString(R.string.decepticons));
+                    mResult.setWinningTransformer(decepticons.get(i).getName());
+                }
+            }
+        }
+        return false;
+    }
+
+    private void findSurvivers() {
+        ArrayList<String> autobotsSurvivors = new ArrayList<>();
+        ArrayList<String> decepticonsSurvivors = new ArrayList<>();
+        if(isOptimus) {
+            for (int i=0; i < numberOfBattleWithSkip; i++) {
+                // autobots win so find decepticons's survivors
+                if (decepticons.get(i).getResult().equals(SURVIVOR)) {
+                    decepticonsSurvivors.add(decepticons.get(i).getName());
+                }
+            }
+            mResult.setSurvivors(decepticonsSurvivors);
+        } else {
+            for (int i=0; i < numberOfBattleWithSkip; i++) {
+                // decepticons win so find autobots's survivors
+                if (autobots.get(i).getResult().equals(SURVIVOR)) {
+                    autobotsSurvivors.add(autobots.get(i).getName());
+                }
+            }
+            mResult.setSurvivors(autobotsSurvivors);
+        }
     }
 
     private void findWinningTeam() {
@@ -286,6 +340,7 @@ public class BattleListFragment extends BaseFragment {
                 numberOfdecepticonsLosing++;
             }
         }
+
         if(numberOfautobotsLosing < numberOfdecepticonsLosing){
             // autobots win
             int bestOverallRating = 0;
@@ -302,7 +357,7 @@ public class BattleListFragment extends BaseFragment {
                     }
                 }
             }
-            mResult.setWinningTeam(AUTOBOTS);
+            mResult.setWinningTeam(getString(R.string.autobots));
             mResult.setSurvivors(decepticonsSurvivors);
         } else {
             //decepticons win
@@ -320,9 +375,10 @@ public class BattleListFragment extends BaseFragment {
                     }
                 }
             }
-            mResult.setWinningTeam(DECEPTICONS);
+            mResult.setWinningTeam(getString(R.string.decepticons));
             mResult.setSurvivors(autobotsSurvivors);
         }
+
     }
 
     @Override
