@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
     // BattleListFragment
     @Override
     public void navigateToResult(Result result) {
-        AppUtils.addToFragment(getSupportFragmentManager(), ResultFragment.newInstance(), RESULT_FRAGMENT);
+        AppUtils.addToFragment(getSupportFragmentManager(), ResultFragment.newInstance(result), RESULT_FRAGMENT);
     }
 
     // ResultFragment

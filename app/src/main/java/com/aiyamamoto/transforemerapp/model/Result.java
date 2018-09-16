@@ -9,23 +9,21 @@ import java.util.ArrayList;
 
 public class Result implements Serializable{
 
-    private int numberObButtle;
+    private int numberOfBattle;
     private String winningTeam;
     private String winningTransformer;
-    private String losongTeam;
     private ArrayList<String> survivors;
     private String message;
 
-    public Result(int numberObButtle, String winningTeam, String winningTransformer, String losongTeam, ArrayList<String> survivors) {
-        this.numberObButtle = numberObButtle;
-        this.winningTeam = winningTeam;
-        this.winningTransformer = winningTransformer;
-        this.losongTeam = losongTeam;
-        this.survivors = survivors;
+    public Result(){
+        this.numberOfBattle = 0;
+        this.winningTeam = "";
+        this.winningTransformer = "";
+        this.survivors = new ArrayList<>();
     }
 
     public int getNumberObButtle() {
-        return numberObButtle;
+        return numberOfBattle;
     }
 
     public String getWinningTeam() {
@@ -36,9 +34,6 @@ public class Result implements Serializable{
         return winningTransformer;
     }
 
-    public String getLosongTeam() {
-        return losongTeam;
-    }
 
     public ArrayList<String> getSurvivors() {
         return survivors;
@@ -46,5 +41,25 @@ public class Result implements Serializable{
 
     public String getMessage() {
         return message;
+    }
+
+    public void setNumberOfBattle(int numberOfBattle) {
+        this.numberOfBattle = numberOfBattle;
+    }
+
+    public void setWinningTeam(String winningTeam) {
+        this.winningTeam = winningTeam;
+    }
+
+    public void setWinningTransformer(String winningTransformer) {
+        this.winningTransformer = winningTransformer;
+    }
+
+    public void setSurvivors(ArrayList<String> survivors) {
+        this.survivors = survivors;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

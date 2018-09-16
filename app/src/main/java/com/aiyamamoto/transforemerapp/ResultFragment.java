@@ -2,7 +2,6 @@ package com.aiyamamoto.transforemerapp;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,50 +9,36 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aiyamamoto.transforemerapp.databinding.FragmentResultBinding;
+import com.aiyamamoto.transforemerapp.model.Result;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
  * {@link ResultFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link ResultFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ResultFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String RESULT_KEY= "result_key";
+
     private FragmentResultBinding mBinding;
 
+    private Result mResult;
     private OnFragmentInteractionListener mListener;
-
-
-
-    // TODO: Rename and change types and number of parameters
-    public static ResultFragment newInstance() {
-        ResultFragment fragment = new ResultFragment();
-        return fragment;
-    }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param result Result.
      * @return A new instance of fragment ResultFragment.
      */
-    public static ResultFragment newInstance(String param1, String param2) {
+    public static ResultFragment newInstance(Result result) {
         ResultFragment fragment = new ResultFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(RESULT_KEY, result);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,16 +48,39 @@ public class ResultFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_result, container, false);
+        if (getArguments() != null) {
+            mResult = (Result) getArguments().getSerializable(RESULT_KEY);
+        }
+        initData();
         setListeners();
         return mBinding.getRoot();
     }
 
-    private void setListeners() {
-        mBinding.backToList.setOnClickListener(mOnClickeListener);
-        mBinding.backToPre.setOnClickListener(mOnClickeListener);
+    private void initData() {
+        if (mResult != null) {
+            mBinding.setItem(mResult);
+        }
+        StringBuilder survivors = new StringBuilder();
+        int count = 0;
+        if (mResult != null) {
+            for (String survivor : mResult.getSurvivors()){
+                survivors.append(survivor);
+                if (0 < count) {
+                    survivors.append(", ");
+                }
+                count++;
+            }
+        }
+
+        mBinding.losingSurvivors.setText(survivors);
     }
 
-    private View.OnClickListener mOnClickeListener = new View.OnClickListener() {
+    private void setListeners() {
+        mBinding.backToList.setOnClickListener(mOnClickListener);
+        mBinding.backToPre.setOnClickListener(mOnClickListener);
+    }
+
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -109,14 +117,8 @@ public class ResultFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * to allow an interaction in this fragment to be communicated
+     * to MainActivity
      */
     public interface OnFragmentInteractionListener {
         void backToTransformerListFragment();

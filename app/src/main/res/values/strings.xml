@@ -2,7 +2,13 @@
     <string name="app_name">TransforemerApp</string>
     <string name="action_settings">Settings</string>
 
-    <string name="Optimus_Prime">Optimus Prime</string>
-    <string name="Predaking">Predaking</string>
+    <!--<string name="A">A</string>-->
+    <!--<string name="D">D</string>-->
+
+    <!--<string name="Autobots">Autobots</string>-->
+    <!--<string name="Decepticons">Decepticons</string>-->
+
+    <!--<string name="Optimus_Prime">Optimus Prime</string>-->
+    <!--<string name="Predaking">Predaking</string>-->
 
 </resources>
