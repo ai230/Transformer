@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -22,7 +23,6 @@ import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,12 +30,13 @@ import retrofit2.Response;
 
 
 /**
- * A placeholder fragment containing a simple view.
+ * A simple {@link Fragment} subclass.
+ * {@link TransformersListFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link TransformersListFragment#newInstance} factory method to
+ * create an instance of this fragment.
  */
 public class TransformersListFragment extends BaseFragment implements TransformersListAdapter.AdapterCallback{
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private FragmentTransformersListBinding mBinding;
     private TransformersListAdapter mTransformersListAdapter;
@@ -72,32 +73,28 @@ public class TransformersListFragment extends BaseFragment implements Transforme
                     findToken();
                     break;
                 case 401:
-                    showToast("401, Try again.");
+                    showToast("401 " + getString(R.string.failed_to_delete_msg));
                     break;
                 default:
-                    showToast("Failed to get Transfermers list, Try again.");
+                    showToast(getString(R.string.failed_to_delete_msg));
                     break;
             }
         }
 
         @Override
         public void onFailure(Call<Void> call, Throwable t) {
-            showToast("Failed to get Transfermers list, Try again.");
+            showToast(getString(R.string.failed_to_delete_msg));
         }
     };
 
-
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment ResultFragment.
+     */
     public static TransformersListFragment newInstance() {
         TransformersListFragment fragment = new TransformersListFragment();
-        return fragment;
-    }
-
-    public static TransformersListFragment newInstance(String param1, String param2) {
-        TransformersListFragment fragment = new TransformersListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -155,6 +152,13 @@ public class TransformersListFragment extends BaseFragment implements Transforme
         TransformerService.ACCESS_TOKEN = SharedPreferencesUtils.getToken(getActivity());
     }
 
+    /**
+     * This method is to call HTTP GET request
+     * to get transformers list.
+     *
+     * @param callback TransformersListAdapter.AdapterCallback
+     *                 to delete a transformer or editing a transformer
+     */
     private void getTransformersList(final TransformersListAdapter.AdapterCallback callback) {
         TransformerService.getTransformersList(new Callback<TransformersList>() {
             @Override
@@ -166,21 +170,27 @@ public class TransformersListFragment extends BaseFragment implements Transforme
                         mBinding.recyclerView.setAdapter(mTransformersListAdapter);
                         break;
                     case 401:
-                        showToast("401, Try again.");
+                        showToast("401 " + getString(R.string.failed_to_get_msg));
                         break;
                     default:
-                        showToast("Failed to get Transfermers list, Try again.");
+                        showToast(getString(R.string.failed_to_get_msg));
                         break;
                 }
             }
 
             @Override
             public void onFailure(Call<TransformersList> call, Throwable t) {
-                showToast("Failed to get Transfermers list, Try again.");
+                showToast(getString(R.string.failed_to_get_msg));
             }
         });
     }
 
+    /**
+     * To organize by team and sort transformer list by rank.
+     *
+     * @param list TransformersList that is responded from database
+     * @return Sorted {@code ArrayList<TransformerResponse>}
+     */
     private ArrayList<Transformer> setOrderTransformerList(TransformersList list) {
 
         ArrayList<TransformerResponse> transformerResponseList = list.getTransformers();
@@ -241,6 +251,10 @@ public class TransformersListFragment extends BaseFragment implements Transforme
         mListener = null;
     }
 
+    /**
+     * to allow an interaction in this fragment to be communicated
+     * to MainActivity
+     */
     public interface OnFragmentInteractionListener {
         void editTransformer(Transformer transformerResponse);
     }

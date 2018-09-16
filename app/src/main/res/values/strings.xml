@@ -5,10 +5,15 @@
     <!--<string name="A">A</string>-->
     <!--<string name="D">D</string>-->
 
-    <!--<string name="Autobots">Autobots</string>-->
-    <!--<string name="Decepticons">Decepticons</string>-->
+    <string name="autobots">Autobots</string>
+    <string name="decepticons">Decepticons</string>
 
-    <!--<string name="Optimus_Prime">Optimus Prime</string>-->
-    <!--<string name="Predaking">Predaking</string>-->
+    <string name="create_transformer">Create Transformer</string>
+    <string name="failed_to_get_msg">Failed to get transformers list, Try again.</string>
+    <string name="failed_to_create_msg">Failed to create a Transformer, Try again.</string>
+    <string name="failed_to_delete_msg">Failed to delete a Transformer, Try again.</string>
+    <string name="enter_name_msg">Please enter a transformer name.</string>
+    <string name="no_network_msg">There is no network connection.</string>
+
 
 </resources>
