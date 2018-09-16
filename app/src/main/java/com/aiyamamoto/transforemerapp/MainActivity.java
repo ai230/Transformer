@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
     };
 
     /**
-     * To check any network available
+     * To check any network available.
      *
-     * @return Boolean of activeNetworkInfo.isConnected()
+     * @return {@code true} if there is available network, otherwise {@code false}
      */
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
     }
 
     /**
-     * To check any network available
-     * if true it takes you to TransformersListFragment
-     * if false it takes you to NoNetworkFragment
+     * To check any network available.
+     * If {@code true} it takes you to TransformersListFragment
+     * if {@code false} it takes you to NoNetworkFragment
      */
     private void checkNetworkAvailable() {
         if (isNetworkAvailable()) {
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
     }
 
     /**
-     * Remove all fragments to be back to TransformersListFragment
+     * Remove all fragments to be back to TransformersListFragment.
      */
     private void navigateToTransformerListFragment() {
         Fragment rf = AppUtils.findFragmentByTag(getSupportFragmentManager(), RESULT_FRAGMENT);
