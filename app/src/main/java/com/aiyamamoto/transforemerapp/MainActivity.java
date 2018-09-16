@@ -1,13 +1,14 @@
 package com.aiyamamoto.transforemerapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.aiyamamoto.transforemerapp.model.Result;
 import com.aiyamamoto.transforemerapp.model.Transformer;
@@ -16,7 +17,7 @@ import com.aiyamamoto.transforemerapp.utils.AppUtils;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements TransformersListFragment.OnFragmentInteractionListener,
-        CreateTransformerFragment.OnFragmentInteractionListener, BattleListFragment.OnFragmentInteractionListener, ResultFragment.OnFragmentInteractionListener {
+        CreateTransformerFragment.OnFragmentInteractionListener, BattleListFragment.OnFragmentInteractionListener, ResultFragment.OnFragmentInteractionListener, NoNetworkFragment.OnFragmentInteractionListener {
 
     // tag for fragments
     private final String CREATE_TRANSFORMER_FRAGMENT = "create_transformer_fragment";
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setFab();
-        AppUtils.navigateToFragment(getSupportFragmentManager(), TransformersListFragment.newInstance());
+        checkNetworkAvailable();
     }
 
     private void setFab() {
@@ -69,8 +70,38 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
         }
     };
 
-    /* remove all fragments to be back to TransformersListFragment
-    * */
+    /**
+     * To check any network available
+     *
+     * @return Boolean of activeNetworkInfo.isConnected()
+     */
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    /**
+     * To check any network available
+     * if true it takes you to TransformersListFragment
+     * if false it takes you to NoNetworkFragment
+     */
+    private void checkNetworkAvailable() {
+        if (isNetworkAvailable()) {
+            AppUtils.navigateToFragment(getSupportFragmentManager(), TransformersListFragment.newInstance());
+            fab.setVisibility(View.VISIBLE);
+            fabBattle.setVisibility(View.VISIBLE);
+        } else {
+            AppUtils.navigateToFragment(getSupportFragmentManager(), NoNetworkFragment.newInstance());
+            fab.setVisibility(View.INVISIBLE);
+            fabBattle.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /**
+     * Remove all fragments to be back to TransformersListFragment
+     */
     private void navigateToTransformerListFragment() {
         Fragment rf = AppUtils.findFragmentByTag(getSupportFragmentManager(), RESULT_FRAGMENT);
         if (rf != null) {
@@ -87,31 +118,10 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
             AppUtils.removeFragment(getSupportFragmentManager(), cf);
         }
         if(cf != null || bf != null) {
+            AppUtils.navigateToFragment(getSupportFragmentManager(), TransformersListFragment.newInstance());
             fab.setVisibility(View.VISIBLE);
             fabBattle.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     // TransformerListFragment
@@ -166,10 +176,16 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
             }
             if(cf != null || bf != null) {
                 // on TransformerListFragment
+                AppUtils.navigateToFragment(getSupportFragmentManager(), TransformersListFragment.newInstance());
                 fab.setVisibility(View.VISIBLE);
                 fabBattle.setVisibility(View.VISIBLE);
             }
         }
     }
 
+    // NoNetworkFragment
+    @Override
+    public void onClickedRetryBtn() {
+        checkNetworkAvailable();
+    }
 }
