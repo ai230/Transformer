@@ -69,22 +69,36 @@ public class BattleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemBattleListHolder.binding.decepticonSkillsLayout.setVisibility(View.INVISIBLE);
         }
 
-        if (mAutobots.get(position).getBattleResult().isCourageAndStrengthWin()) {
+        if (mAutobots.get(position).getBattleResult().isNameWin()) {
+            setTextViewBg(itemBattleListHolder.binding.autobotsName, mAutobots.get(position).getResult(), position);
+            setTextViewBg(itemBattleListHolder.binding.decepticonName, mDecepticons.get(position).getResult(), position);
+        }else if (mAutobots.get(position).getBattleResult().isCourageAndStrengthWin()) {
             setTextViewBg(itemBattleListHolder.binding.autobotsCourage, mAutobots.get(position).getResult(), position);
             setTextViewBg(itemBattleListHolder.binding.autobotsStrength, mAutobots.get(position).getResult(), position);
-        } else if (mAutobots.get(position).getBattleResult().isSkillWin()) {
-            setTextViewBg(itemBattleListHolder.binding.autobotsSkill,mAutobots.get(position).getResult(), position);
-        } else if (mAutobots.get(position).getBattleResult().isOverallRatingWin()) {
-            setTextViewBg(itemBattleListHolder.binding.autobotsOverall,mAutobots.get(position).getResult(), position);
-        }
-
-        if (mDecepticons.get(position).getBattleResult().isCourageAndStrengthWin()) {
             setTextViewBg(itemBattleListHolder.binding.decepticonCourage, mDecepticons.get(position).getResult(), position);
             setTextViewBg(itemBattleListHolder.binding.decepticonStrength, mDecepticons.get(position).getResult(), position);
+        } else if (mAutobots.get(position).getBattleResult().isSkillWin()) {
+            setTextViewBg(itemBattleListHolder.binding.autobotsSkill,mAutobots.get(position).getResult(), position);
+            setTextViewBg(itemBattleListHolder.binding.decepticonSkill,mDecepticons.get(position).getResult(), position);
+        } else if (mAutobots.get(position).getBattleResult().isOverallRatingWin()) {
+            setTextViewBg(itemBattleListHolder.binding.autobotsOverall,mAutobots.get(position).getResult(), position);
+            setTextViewBg(itemBattleListHolder.binding.decepticonOverall,mDecepticons.get(position).getResult(), position);
+        }
+
+        if (mDecepticons.get(position).getBattleResult().isNameWin()) {
+            setTextViewBg(itemBattleListHolder.binding.decepticonName, mDecepticons.get(position).getResult(), position);
+            setTextViewBg(itemBattleListHolder.binding.autobotsName, mAutobots.get(position).getResult(), position);
+        } else if (mDecepticons.get(position).getBattleResult().isCourageAndStrengthWin()) {
+            setTextViewBg(itemBattleListHolder.binding.decepticonCourage, mDecepticons.get(position).getResult(), position);
+            setTextViewBg(itemBattleListHolder.binding.decepticonStrength, mDecepticons.get(position).getResult(), position);
+            setTextViewBg(itemBattleListHolder.binding.autobotsCourage, mAutobots.get(position).getResult(), position);
+            setTextViewBg(itemBattleListHolder.binding.autobotsStrength, mAutobots.get(position).getResult(), position);
         } else if (mDecepticons.get(position).getBattleResult().isSkillWin()) {
             setTextViewBg(itemBattleListHolder.binding.decepticonSkill, mDecepticons.get(position).getResult(), position);
+            setTextViewBg(itemBattleListHolder.binding.autobotsSkill,mAutobots.get(position).getResult(), position);
         } else if (mDecepticons.get(position).getBattleResult().isOverallRatingWin()) {
             setTextViewBg(itemBattleListHolder.binding.decepticonOverall, mDecepticons.get(position).getResult(), position);
+            setTextViewBg(itemBattleListHolder.binding.autobotsOverall,mAutobots.get(position).getResult(), position);
         }
 
         itemBattleListHolder.binding.setAutobot(mAutobots.get(position));
