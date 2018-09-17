@@ -28,6 +28,18 @@ public class ResultFragment extends Fragment {
     private Result mResult;
     private OnFragmentInteractionListener mListener;
 
+//    /**
+//     * Use this factory method to create a new instance of
+//     * this fragment using the provided parameters.
+//     *
+//     * This is From Battle Fragment when Optimus Prime and Predaking are faced
+//     *
+//     * @return A new instance of fragment ResultFragment.
+//     */
+//    public static ResultFragment newInstance() {
+//        return new ResultFragment();
+//    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -58,11 +70,13 @@ public class ResultFragment extends Fragment {
 
     private void checkKingsFaced() {
         if (mResult.isOptimusAndPredakingFaced()) {
+            mBinding.backToPre.setVisibility(View.GONE);
             mBinding.resultLayout.setVisibility(View.GONE);
             mBinding.message.setVisibility(View.VISIBLE);
             mBinding.message.setText("Optimus Prime and Predaking face each other (or a duplicate of each other), the game" +
                     " immediately ends with all competitors destroyed");
         } else {
+            mBinding.backToPre.setVisibility(View.VISIBLE);
             mBinding.resultLayout.setVisibility(View.VISIBLE);
             mBinding.message.setVisibility(View.GONE);
             initData();

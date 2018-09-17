@@ -13,7 +13,7 @@ public class Result implements Serializable{
     private String winningTeam;
     private String winningTransformer;
     private ArrayList<String> survivors;
-    private String message;
+//    private String message;
     private boolean isOptimusAndPredakingFaced;
 
     public Result(){
@@ -41,9 +41,9 @@ public class Result implements Serializable{
         return survivors;
     }
 
-    public String getMessage() {
-        return message;
-    }
+//    public String getMessage() {
+//        return message;
+//    }
 
     public void setNumberOfBattle(int numberOfBattle) {
         this.numberOfBattle = numberOfBattle;
@@ -61,9 +61,9 @@ public class Result implements Serializable{
         this.survivors = survivors;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+//    public void setMessage(String message) {
+//        this.message = message;
+//    }
 
     public boolean isOptimusAndPredakingFaced() {
         return isOptimusAndPredakingFaced;

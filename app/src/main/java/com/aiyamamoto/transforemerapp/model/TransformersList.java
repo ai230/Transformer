@@ -17,4 +17,8 @@ public class TransformersList {
     public ArrayList<TransformerResponse> getTransformers() {
         return transformers;
     }
+
+    public void setTransformers(ArrayList<TransformerResponse> transformers) {
+        this.transformers = transformers;
+    }
 }

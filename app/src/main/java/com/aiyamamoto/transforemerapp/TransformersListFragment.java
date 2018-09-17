@@ -43,6 +43,12 @@ public class TransformersListFragment extends BaseFragment implements Transforme
 
     OnFragmentInteractionListener mListener;
 
+    /**
+     * To be called when it is long clicked each transformer
+     *
+     * @param transformerId
+     * @param name showing the name of transformer to delete
+     */
     @Override
     public void deleteTransformer(final String transformerId, String name) {
         new AlertDialog.Builder(getActivity())
@@ -113,7 +119,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
     }
 
     private void findToken() {
-        getToken(); //TODO dose't need to go through when it came back from deleteing
+        getToken();
         getTransformersList(this);
     }
 
@@ -191,7 +197,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
      * @param list TransformersList that is responded from database
      * @return Sorted {@code ArrayList<TransformerResponse>}
      */
-    private ArrayList<Transformer> setOrderTransformerList(TransformersList list) {
+    public ArrayList<Transformer> setOrderTransformerList(TransformersList list) {
 
         ArrayList<TransformerResponse> transformerResponseList = list.getTransformers();
         MainActivity.autobotsList = new ArrayList<>();

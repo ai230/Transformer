@@ -8,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.aiyamamoto.transforemerapp.model.Result;
@@ -17,12 +19,17 @@ import com.aiyamamoto.transforemerapp.utils.AppUtils;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements TransformersListFragment.OnFragmentInteractionListener,
-        CreateTransformerFragment.OnFragmentInteractionListener, BattleListFragment.OnFragmentInteractionListener, ResultFragment.OnFragmentInteractionListener, NoNetworkFragment.OnFragmentInteractionListener {
+        CreateTransformerFragment.OnFragmentInteractionListener,
+        BattleListFragment.OnFragmentInteractionListener,
+        ResultFragment.OnFragmentInteractionListener,
+        NoNetworkFragment.OnFragmentInteractionListener,
+        ChooseTransformerFragment.OnFragmentInteractionListener {
 
     // tag for fragments
     private final String CREATE_TRANSFORMER_FRAGMENT = "create_transformer_fragment";
     private final String BATTLE_FRAGMENT = "battle_fragment";
     private final String RESULT_FRAGMENT = "result_fragment";
+    private final String CHOOSE_FRAGMENT = "choose_fragment";
 
     public static  ArrayList<Transformer> autobotsList;
     public static ArrayList<Transformer> decepticonsList;
@@ -103,6 +110,10 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
      * Remove all fragments to be back to TransformersListFragment.
      */
     private void navigateToTransformerListFragment() {
+        Fragment fragment = AppUtils.findFragmentByTag(getSupportFragmentManager(), CHOOSE_FRAGMENT);
+        if (fragment != null) {
+            AppUtils.removeFragment(getSupportFragmentManager(), fragment);
+        }
         Fragment rf = AppUtils.findFragmentByTag(getSupportFragmentManager(), RESULT_FRAGMENT);
         if (rf != null) {
             AppUtils.removeFragment(getSupportFragmentManager(), rf);
@@ -117,11 +128,36 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
         if (cf != null) {
             AppUtils.removeFragment(getSupportFragmentManager(), cf);
         }
-        if(cf != null || bf != null) {
+        if(cf != null || bf != null || fragment != null) {
             AppUtils.navigateToFragment(getSupportFragmentManager(), TransformersListFragment.newInstance());
             fab.setVisibility(View.VISIBLE);
             fabBattle.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            fab.setVisibility(View.GONE);
+            fabBattle.setVisibility(View.GONE);
+            AppUtils.addToFragment(getSupportFragmentManager(), ChooseTransformerFragment.newInstance(), CHOOSE_FRAGMENT);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     // TransformerListFragment
@@ -145,6 +181,16 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
         AppUtils.addToFragment(getSupportFragmentManager(), ResultFragment.newInstance(result), RESULT_FRAGMENT);
     }
 
+    // BattleListFragment
+    @Override
+    public void navigateDirectlyToResult(Result result) {
+        Fragment bf = AppUtils.findFragmentByTag(getSupportFragmentManager(),BATTLE_FRAGMENT);
+        if (bf != null) {
+            AppUtils.removeFragment(getSupportFragmentManager(), bf);
+            AppUtils.addToFragment(getSupportFragmentManager(), ResultFragment.newInstance(result), RESULT_FRAGMENT);
+        }
+    }
+
     // ResultFragment
     @Override
     public void backToBattleListFragment() {
@@ -162,7 +208,20 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
         Fragment rf = AppUtils.findFragmentByTag(getSupportFragmentManager(), RESULT_FRAGMENT);
         if (rf != null) {
             AppUtils.removeFragment(getSupportFragmentManager(), rf);
+            Fragment battleFragment = AppUtils.findFragmentByTag(getSupportFragmentManager(), BATTLE_FRAGMENT);
+            if (battleFragment == null) {
+                // on TransformerListFragment
+                AppUtils.navigateToFragment(getSupportFragmentManager(), TransformersListFragment.newInstance());
+                fab.setVisibility(View.VISIBLE);
+                fabBattle.setVisibility(View.VISIBLE);
+            }
         } else {
+            // ChooseTransformerFragment to TransformersListFragment
+            Fragment chooseFragment = AppUtils.findFragmentByTag(getSupportFragmentManager(), CHOOSE_FRAGMENT);
+            if (chooseFragment != null) {
+                AppUtils.removeFragment(getSupportFragmentManager(), chooseFragment);
+            }
+
             // BattleListFragment to TransformersListFragment
             Fragment bf = AppUtils.findFragmentByTag(getSupportFragmentManager(), BATTLE_FRAGMENT);
             if (bf != null) {
@@ -174,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
             if (cf != null) {
                 AppUtils.removeFragment(getSupportFragmentManager(), cf);
             }
-            if(cf != null || bf != null) {
+            if(cf != null || bf != null || chooseFragment != null) {
                 // on TransformerListFragment
                 AppUtils.navigateToFragment(getSupportFragmentManager(), TransformersListFragment.newInstance());
                 fab.setVisibility(View.VISIBLE);

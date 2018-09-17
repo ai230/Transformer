@@ -3,6 +3,7 @@ package com.aiyamamoto.transforemerapp;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,13 @@ import com.aiyamamoto.transforemerapp.model.Transformer;
 
 import java.util.ArrayList;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * {@link BattleListFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link BattleListFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class BattleListFragment extends BaseFragment {
 
     private final String WIN = "WIN";
@@ -23,9 +31,6 @@ public class BattleListFragment extends BaseFragment {
     private final String TIE = "TIE";
     private final String SURVIVOR = "SURVIVOR";
     private final String FAKE = "FAKE";
-
-//    private final String AUTOBOTS = "Autobots";
-//    private final String DECEPTICONS = "Decepticons";
 
     private final String OPTIMUS_PRIME = "Optimus Prime";
     private final String PREDAKING = "Predaking";
@@ -45,6 +50,7 @@ public class BattleListFragment extends BaseFragment {
 
     private boolean isOptimus;
     private boolean isPredaking;
+
     public static BattleListFragment newInstance() {
         BattleListFragment fragment = new BattleListFragment();
         return fragment;
@@ -73,7 +79,7 @@ public class BattleListFragment extends BaseFragment {
                     // if find Optimus or Predaking not exist
                     if(!findWinningTransformer()) {
                         if (isOptimus || isPredaking) {
-                            findSurvivers();
+                            findSurvivors();
                         } else {
                             findWinningTeam();
                         }
@@ -106,6 +112,23 @@ public class BattleListFragment extends BaseFragment {
     }
 
 
+    /**
+     * To update a battle result for each transformer
+     * Use the below methods to find battle result.
+     *
+     * If there is Optimas Prime or Predaking, or both.
+     * {@link #battleName(int, BattleResult, BattleResult)},
+     *
+     * To compare Courage and strength
+     * {@link #battleCourageAndStrength(int, BattleResult, BattleResult)},
+     *
+     * To compare Skill
+     * {@link #battleSkill(int, BattleResult, BattleResult)},
+     *
+     * To find who has highest Overall Rating
+     * {@link #battleOverallRating(int, BattleResult, BattleResult)}
+     *
+     */
     private void battle() {
         for (int position = 0; position < numberOfBattleWithSkip; position++) {
             BattleResult autobotsBattleResult = new BattleResult();
@@ -156,23 +179,25 @@ public class BattleListFragment extends BaseFragment {
         String decepticonName = decepticons.get(position).getName();
 
         // at first check their name are not special name
-        if (!autobotName.equals(OPTIMUS_PRIME) && !decepticonName.equals(PREDAKING)) {
+        String s = PREDAKING.toLowerCase();
+        if (!(autobotName.toLowerCase()).equals(OPTIMUS_PRIME.toLowerCase()) && !(decepticonName.toLowerCase()).equals(PREDAKING.toLowerCase())) {
             return false;
         } else {
-            if (autobotName.equals(OPTIMUS_PRIME) && decepticonName.equals(PREDAKING)) {
+            if ((autobotName.toLowerCase()).equals(OPTIMUS_PRIME.toLowerCase()) && (decepticonName.toLowerCase()).equals(PREDAKING.toLowerCase())) {
                 // Special rule2
-                mResult.setMessage(OPTIMUS_PRIME + " and " + PREDAKING + "faced each other, so the game ends");
+                mResult.setOptimusAndPredakingFaced(true);
+                mListener.navigateDirectlyToResult(mResult);
                 return true;
             } else {
                 // Special rule1
-                if (autobotName.equals(OPTIMUS_PRIME)) {
+                if ((autobotName.toLowerCase()).equals(OPTIMUS_PRIME.toLowerCase())) {
                     autobots.get(position).setResult(WIN);
                     decepticons.get(position).setResult(LOSE);
 
                     autobotsBattleResult.setNameWin(true);
                     autobots.get(position).setBattleResult(autobotsBattleResult);
                     return true;
-                } else if (decepticonName.equals(PREDAKING)) {
+                } else if ((decepticonName.toLowerCase()).equals(PREDAKING.toLowerCase())) {
                     autobots.get(position).setResult(LOSE);
                     decepticons.get(position).setResult(WIN);
 
@@ -304,7 +329,12 @@ public class BattleListFragment extends BaseFragment {
         return false;
     }
 
-    private void findSurvivers() {
+    /**
+     * To create losing team's survivors name list of {@code ArrayList<String>}
+     *
+     * This method is called if there is Optimus Prime or Predaking in the battle
+     */
+    private void findSurvivors() {
         ArrayList<String> autobotsSurvivors = new ArrayList<>();
         ArrayList<String> decepticonsSurvivors = new ArrayList<>();
         if(isOptimus) {
@@ -326,6 +356,13 @@ public class BattleListFragment extends BaseFragment {
         }
     }
 
+    /**
+     * To find 'Winning team', 'Winning Transformer' and
+     * "Survivors name list from losing team".
+     *
+     * This method is called if there is not Optimus Prime
+     * and Predaking in the battle
+     */
     private void findWinningTeam() {
         int numberOfautobotsLosing = 0;
         int numberOfdecepticonsLosing = 0;
@@ -395,8 +432,13 @@ public class BattleListFragment extends BaseFragment {
         mListener = null;
     }
 
+    /**
+     * To allow an interaction in this fragment to be communicated
+     * to MainActivity
+     */
     public interface OnFragmentInteractionListener {
         void navigateToResult(Result result);
+        void navigateDirectlyToResult(Result result);
     }
 
 }

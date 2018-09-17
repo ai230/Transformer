@@ -219,30 +219,31 @@ public class CreateTransformerFragment extends BaseFragment {
      *
      * @return A new instance of CreateTransformerBody
      */
-    private CreateTransformerBody createTransformerBody() {
-
-        String id = "";
-        if (isEdit) {
-            id = mTransformer.getId();
-        } else {
-            id = "0";
+    public CreateTransformerBody createTransformerBody() {
+        String id = "0";
+        String name = "";
+        String team ="";
+        if(mBinding != null) {
+            if (isEdit) {
+                id = mTransformer.getId();
+            } else {
+                id = "0";
+            }
+            name = mBinding.nameEdittext.getText().toString();
+            if (mBinding.autobotsRadio.isChecked()) {
+                team = "A";
+            } else {
+                team = "D";
+            }
+            strengthValue = mBinding.seekBarStrength.getProgress();
+            intelligenceValue = mBinding.seekBarIntelligence.getProgress();
+            speedValue = mBinding.seekBarSpeed.getProgress();
+            enduranceValue = mBinding.seekBarEndurance.getProgress();
+            rankValue = mBinding.seekBarRank.getProgress();
+            courageValue = mBinding.seekBarCourage.getProgress();
+            firepowerValue = mBinding.seekBarFirepower.getProgress();
+            skillValue = mBinding.seekBarSkill.getProgress();
         }
-        String name = mBinding.nameEdittext.getText().toString();
-        String team = "";
-        if (mBinding.autobotsRadio.isChecked()) {
-            team = "A";
-        } else {
-            team = "D";
-        }
-        strengthValue = mBinding.seekBarStrength.getProgress();
-        intelligenceValue = mBinding.seekBarIntelligence.getProgress();
-        speedValue = mBinding.seekBarSpeed.getProgress();
-        enduranceValue = mBinding.seekBarEndurance.getProgress();
-        rankValue = mBinding.seekBarRank.getProgress();
-        courageValue = mBinding.seekBarCourage.getProgress();
-        firepowerValue = mBinding.seekBarFirepower.getProgress();
-        skillValue = mBinding.seekBarSkill.getProgress();
-
         CreateTransformerBody body = new CreateTransformerBody(
                 id, name, team,strengthValue, intelligenceValue, speedValue,enduranceValue, rankValue, courageValue, firepowerValue, skillValue);
 
@@ -264,7 +265,7 @@ public class CreateTransformerFragment extends BaseFragment {
                         mListener.backToTransformerListFragment();
                         break;
                     case 401:
-                        showToast("401 Failed to create a Transfermer, Try again.");
+                        showToast("401 " + getString(R.string.failed_to_create_msg));
                         break;
                     default:
                         showToast(getString(R.string.failed_to_create_msg));
