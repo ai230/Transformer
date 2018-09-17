@@ -3,6 +3,7 @@ package com.aiyamamoto.transforemerapp;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.aiyamamoto.transforemerapp.model.TransformersList;
 import com.aiyamamoto.transforemerapp.network.TransformerApi;
 import com.aiyamamoto.transforemerapp.network.body.CreateTransformerBody;
 import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
@@ -12,6 +13,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -25,9 +27,13 @@ import retrofit2.mock.MockRetrofit;
 import retrofit2.mock.NetworkBehavior;
 
 /**
- * To test Retrofit2 mocking HTTP responses
- * {@link TransformerApi#getAllsparkToken(String)}
+ * Unit test Retrofit2 mocking HTTP responses
  *
+ * {@link TransformerApi#getAllsparkToken(String)}
+ * {@link TransformerApi#createTransformer(String, CreateTransformerBody)}
+ * {@link TransformerApi#editTransformer(String, CreateTransformerBody)}
+ * {@link TransformerApi#deleteTransformer(String, String)}
+ * {@link TransformerApi#getTransformersList(String)}
  * Created by aiyamamoto on 2018-09-16.
  */
 
@@ -191,6 +197,57 @@ public class TransformerApiMockAdapterTest extends InstrumentationTestCase {
 
         //Asserting response
         Assert.assertEquals(404, responseResponse.code());
+        Assert.assertEquals("Request Not Found", error.getError().getMessage());
+
+    }
+
+    @Test
+    public void testGetTransformersListRetrieval() throws Exception {
+        BehaviorDelegate<TransformerApi> delegate = mockRetrofit.create(TransformerApi.class);
+        TransformerApi mockApi = new MockTransformerApiService(delegate);
+
+        TransformersList list = new TransformersList();
+        ArrayList<TransformerResponse> arrayList = new ArrayList<>();
+
+        arrayList.add(new TransformerResponse("0", "test", "A",2,5,7,9,2,5,6,8, "url"));
+        list.setTransformers(arrayList);
+
+        //Actual test
+        Call<TransformersList> responseCall = mockApi.getTransformersList("bear token");
+        Response<TransformersList> responseResponse = responseCall.execute();
+
+        //Asserting response
+        Assert.assertTrue(responseResponse.isSuccessful());
+        Assert.assertEquals(list.getTransformers().get(0).getId(),responseResponse.body().getTransformers().get(0).getId());
+        Assert.assertEquals(list.getTransformers().get(0).getName(),responseResponse.body().getTransformers().get(0).getName());
+        Assert.assertEquals(list.getTransformers().get(0).getTeam(),responseResponse.body().getTransformers().get(0).getTeam());
+        Assert.assertEquals(list.getTransformers().get(0).getStrength(),responseResponse.body().getTransformers().get(0).getStrength());
+        Assert.assertEquals(list.getTransformers().get(0).getIntelligence(),responseResponse.body().getTransformers().get(0).getIntelligence());
+        Assert.assertEquals(list.getTransformers().get(0).getSpeed(),responseResponse.body().getTransformers().get(0).getSpeed());
+        Assert.assertEquals(list.getTransformers().get(0).getSpeed(),responseResponse.body().getTransformers().get(0).getSpeed());
+        Assert.assertEquals(list.getTransformers().get(0).getEndurance(),responseResponse.body().getTransformers().get(0).getEndurance());
+        Assert.assertEquals(list.getTransformers().get(0).getRank(),responseResponse.body().getTransformers().get(0).getRank());
+        Assert.assertEquals(list.getTransformers().get(0).getCourage(),responseResponse.body().getTransformers().get(0).getCourage());
+        Assert.assertEquals(list.getTransformers().get(0).getFirepower(),responseResponse.body().getTransformers().get(0).getFirepower());
+        Assert.assertEquals(list.getTransformers().get(0).getSkill(),responseResponse.body().getTransformers().get(0).getSkill());
+    }
+
+    @Test
+    public void testFailedGetTransformersListRetrieval() throws Exception {
+
+        BehaviorDelegate<TransformerApi> delegate = mockRetrofit.create(TransformerApi.class);
+        MockFailedTransformerApiService mockService = new MockFailedTransformerApiService(delegate);
+
+        //Actual Test
+        Call<TransformersList> token = mockService.getTransformersList("Bear token");
+        Response<TransformersList> tokenResponse = token.execute();
+        Assert.assertFalse(tokenResponse.isSuccessful());
+
+        Converter<ResponseBody, TransformerApiErrorResponse> errorConverter = retrofit.responseBodyConverter(TransformerApiErrorResponse.class, new Annotation[0]);
+        TransformerApiErrorResponse error = errorConverter.convert(tokenResponse.errorBody());
+
+        //Asserting response
+        Assert.assertEquals(404, tokenResponse.code());
         Assert.assertEquals("Request Not Found", error.getError().getMessage());
 
     }

@@ -19,8 +19,13 @@ import retrofit2.mock.BehaviorDelegate;
 import retrofit2.mock.Calls;
 
 /**
- * To test Retrofit2 mocking HTTP responses
+ * Setting error data for unit tests Retrofit2 mocking HTTP responses.
+ *
  * {@link TransformerApi#getAllsparkToken(String)}
+ * {@link TransformerApi#createTransformer(String, CreateTransformerBody)}
+ * {@link TransformerApi#editTransformer(String, CreateTransformerBody)}
+ * {@link TransformerApi#deleteTransformer(String, String)}
+ * {@link TransformerApi#getTransformersList(String)}
  *
  * Created by aiyamamoto on 2018-09-16.
  */
@@ -95,7 +100,23 @@ public class MockFailedTransformerApiService implements TransformerApi {
 
     @Override
     public Call<TransformersList> getTransformersList(String authorization) {
-        return null;
+
+        Error error = new Error();
+        error.setCode(404);
+        error.setMessage("Request Not Found");
+
+        TransformerApiErrorResponse transformerApiErrorResponse = new TransformerApiErrorResponse();
+        transformerApiErrorResponse.setError(error);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = "";
+        try {
+            json = ow.writeValueAsString(transformerApiErrorResponse);
+            Response response = Response.error(404, ResponseBody.create(MediaType.parse("application/json") ,json));
+            return delegate.returning(Calls.response(response)).getTransformersList(authorization);
+        } catch (JsonProcessingException e) {
+            Log.e(TAG, "JSON Processing exception:",e);
+            return Calls.failure(e);
+        }
     }
 
     @Override
