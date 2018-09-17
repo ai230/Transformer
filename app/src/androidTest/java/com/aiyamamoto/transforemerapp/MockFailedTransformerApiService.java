@@ -55,12 +55,42 @@ public class MockFailedTransformerApiService implements TransformerApi {
 
     @Override
     public Call<TransformerResponse> createTransformer(String authorization, CreateTransformerBody body) {
-        return null;
+        Error error = new Error();
+        error.setCode(404);
+        error.setMessage("Request Not Found");
+
+        TransformerApiErrorResponse transformerApiErrorResponse = new TransformerApiErrorResponse();
+        transformerApiErrorResponse.setError(error);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = "";
+        try {
+            json = ow.writeValueAsString(transformerApiErrorResponse);
+            Response response = Response.error(404, ResponseBody.create(MediaType.parse("application/json") ,json));
+            return delegate.returning(Calls.response(response)).createTransformer(authorization, body);
+        } catch (JsonProcessingException e) {
+            Log.e(TAG, "JSON Processing exception:",e);
+            return Calls.failure(e);
+        }
     }
 
     @Override
     public Call<TransformerResponse> editTransformer(String authorization, CreateTransformerBody body) {
-        return null;
+        Error error = new Error();
+        error.setCode(404);
+        error.setMessage("Request Not Found");
+
+        TransformerApiErrorResponse transformerApiErrorResponse = new TransformerApiErrorResponse();
+        transformerApiErrorResponse.setError(error);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = "";
+        try {
+            json = ow.writeValueAsString(transformerApiErrorResponse);
+            Response response = Response.error(404, ResponseBody.create(MediaType.parse("application/json") ,json));
+            return delegate.returning(Calls.response(response)).editTransformer(authorization, body);
+        } catch (JsonProcessingException e) {
+            Log.e(TAG, "JSON Processing exception:",e);
+            return Calls.failure(e);
+        }
     }
 
     @Override
@@ -70,6 +100,22 @@ public class MockFailedTransformerApiService implements TransformerApi {
 
     @Override
     public Call<Void> deleteTransformer(String authorization, String transformerId) {
-        return null;
+
+        Error error = new Error();
+        error.setCode(404);
+        error.setMessage("Request Not Found");
+
+        TransformerApiErrorResponse transformerApiErrorResponse = new TransformerApiErrorResponse();
+        transformerApiErrorResponse.setError(error);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = "";
+        try {
+            json = ow.writeValueAsString(transformerApiErrorResponse);
+            Response response = Response.error(404, ResponseBody.create(MediaType.parse("application/json") ,json));
+            return delegate.returning(Calls.response(response)).deleteTransformer(authorization, transformerId);
+        } catch (JsonProcessingException e) {
+            Log.e(TAG, "JSON Processing exception:",e);
+            return Calls.failure(e);
+        }
     }
 }

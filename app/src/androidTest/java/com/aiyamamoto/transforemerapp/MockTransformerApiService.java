@@ -25,26 +25,30 @@ public class MockTransformerApiService implements TransformerApi {
     @Override
     public Call<String> getAllsparkToken(String accept) {
         String token = "faketoken";
-        return delegate.returningResponse(token).getAllsparkToken("");
+        return delegate.returningResponse(token).getAllsparkToken(accept);
     }
 
     @Override
     public Call<TransformerResponse> createTransformer(String authorization, CreateTransformerBody body) {
-        return null;
+        TransformerResponse transformerResponse = new TransformerResponse("0", "test", "A",2,5,7,9,2,5,6,8, "url");
+        return delegate.returningResponse(transformerResponse).createTransformer(authorization, body);
     }
 
     @Override
     public Call<TransformerResponse> editTransformer(String authorization, CreateTransformerBody body) {
-        return null;
+        TransformerResponse transformerResponse = new TransformerResponse("0", "test", "A",2,5,7,9,2,5,6,8, "url");
+
+        return delegate.returningResponse(transformerResponse).editTransformer(authorization, body);
     }
 
     @Override
     public Call<TransformersList> getTransformersList(String authorization) {
+
         return null;
     }
 
     @Override
     public Call<Void> deleteTransformer(String authorization, String transformerId) {
-        return null;
+        return delegate.returningResponse("").deleteTransformer(authorization, transformerId);
     }
 }
