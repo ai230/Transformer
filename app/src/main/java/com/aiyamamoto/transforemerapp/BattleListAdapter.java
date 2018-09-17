@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aiyamamoto.transforemerapp.databinding.ItemBattleBinding;
-import com.aiyamamoto.transforemerapp.model.Result;
 import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.squareup.picasso.Picasso;
 
@@ -44,9 +43,6 @@ public class BattleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ItemBattleListHolder itemBattleListHolder = (ItemBattleListHolder) holder;
-
-//        itemBattleListHolder.binding.setAutobot(mAutobots.get(position));
-//        itemBattleListHolder.binding.setDecepticon(mDecepticons.get(position));
 
         // set team icons
         if(mAutobots.get(position).getTeam_icon().isEmpty()) {

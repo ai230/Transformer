@@ -18,7 +18,6 @@ import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.model.TransformersList;
 import com.aiyamamoto.transforemerapp.network.TransformerService;
 import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
-import com.aiyamamoto.transforemerapp.utils.AppUtils;
 import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;

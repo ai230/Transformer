@@ -1,10 +1,11 @@
 package com.aiyamamoto.transforemerapp.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
+ * This is a class for Sheared preferences functions.
+ *
  * Created by aiyamamoto on 2018-09-14.
  */
 

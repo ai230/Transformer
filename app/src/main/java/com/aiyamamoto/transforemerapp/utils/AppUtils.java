@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import com.aiyamamoto.transforemerapp.R;
 
 /**
+ * This is a class organising fragments navigation functions.
+ *
  * Created by aiyamamoto on 2018-09-13.
  */
 
@@ -34,14 +36,6 @@ public class AppUtils {
     public static void removeFragment(FragmentManager fragmentManager, Fragment fragment) {
         fragmentManager.beginTransaction()
                 .remove(fragment)
-                .commit();
-    }
-
-    public static void navigateToFragmentBackStack(FragmentManager fragmentManager, Fragment fragment) {
-        fragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.fragment, fragment)
-                .addToBackStack(null)
                 .commit();
     }
 

@@ -107,7 +107,7 @@ public class TransformersListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private int calOverallRating(Transformer tf) {
         return tf.getStrength() + tf.getIntelligence() + tf.getSpeed() + tf.getEndurance() + tf.getFirepower();
-    };
+    }
 
 
 }
