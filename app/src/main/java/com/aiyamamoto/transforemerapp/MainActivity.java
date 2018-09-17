@@ -168,6 +168,20 @@ public class MainActivity extends AppCompatActivity implements TransformersListF
         fabBattle.setVisibility(View.GONE);
     }
 
+    // TransformerListFragment
+    @Override
+    public void addTransformer() {
+        AppUtils.addToFragment(getSupportFragmentManager(),CreateTransformerFragment.newInstance(), CREATE_TRANSFORMER_FRAGMENT);
+        fab.setVisibility(View.INVISIBLE);
+        fabBattle.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void toggleBattleBtn(int visibility) {
+        fabBattle.setVisibility(visibility);
+    }
+
+
     // CreateTransformerFragment
     // ResultFragment
     @Override

@@ -18,6 +18,7 @@ import com.aiyamamoto.transforemerapp.model.Transformer;
 import com.aiyamamoto.transforemerapp.model.TransformersList;
 import com.aiyamamoto.transforemerapp.network.TransformerService;
 import com.aiyamamoto.transforemerapp.network.response.TransformerResponse;
+import com.aiyamamoto.transforemerapp.utils.AppUtils;
 import com.aiyamamoto.transforemerapp.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
@@ -119,7 +120,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
     }
 
     private void findToken() {
-        getToken();
+        getToken(this);
         getTransformersList(this);
     }
 
@@ -127,7 +128,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
         SharedPreferencesUtils.setToken(getActivity(), token);
     }
 
-    private void getToken() {
+    private void getToken(final TransformersListAdapter.AdapterCallback callback) {
         TransformerService.ACCESS_TOKEN = "";
         TransformerService.ACCESS_TOKEN = SharedPreferencesUtils.getToken(getActivity());
         if (TransformerService.ACCESS_TOKEN.equals("")) {
@@ -138,6 +139,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
                         case 200:
                             TransformerService.ACCESS_TOKEN = response.body().toString();
                             setToken(TransformerService.ACCESS_TOKEN);
+                            getTransformersList(callback);
                             break;
                         default:
                             Toast.makeText(getActivity(), "Try again", Toast.LENGTH_SHORT).show();
@@ -176,7 +178,6 @@ public class TransformersListFragment extends BaseFragment implements Transforme
                         mBinding.recyclerView.setAdapter(mTransformersListAdapter);
                         break;
                     case 401:
-                        showToast("401 " + getString(R.string.failed_to_get_msg));
                         break;
                     default:
                         showToast(getString(R.string.failed_to_get_msg));
@@ -199,46 +200,69 @@ public class TransformersListFragment extends BaseFragment implements Transforme
      */
     public ArrayList<Transformer> setOrderTransformerList(TransformersList list) {
 
+        ArrayList<Transformer> newList = new ArrayList<>();
         ArrayList<TransformerResponse> transformerResponseList = list.getTransformers();
         MainActivity.autobotsList = new ArrayList<>();
         MainActivity.decepticonsList = new ArrayList<>();
 
-        for (int i=0; i < transformerResponseList.size(); i++) {
-            Transformer transformer = new Transformer(transformerResponseList.get(i).getId(),
-                    transformerResponseList.get(i).getName(),
-                    transformerResponseList.get(i).getStrength(),
-                    transformerResponseList.get(i).getIntelligence(),
-                    transformerResponseList.get(i).getSpeed(),
-                    transformerResponseList.get(i).getEndurance(),
-                    transformerResponseList.get(i).getRank(),
-                    transformerResponseList.get(i).getCourage(),
-                    transformerResponseList.get(i).getFirepower(),
-                    transformerResponseList.get(i).getSkill(),
-                    transformerResponseList.get(i).getTeam(),
-                    transformerResponseList.get(i).getTeam_icon());
-            if (transformerResponseList.get(i).getTeam().equals("A")) {
-                MainActivity.autobotsList.add(transformer);
-            } else {
-                MainActivity.decepticonsList.add(transformer);
+        // if transformer list size 0, show dialog to open create one
+        if (transformerResponseList.size() == 0) {
+            mListener.toggleBattleBtn(View.INVISIBLE);
+            if (getActivity() != null) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Create new transformer?")
+                        .setMessage("Is there any transformer yet? Do you want to create a transformer?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK button pressed
+                                // add create transformer fragment here
+                                mListener.addTransformer();
+                            }
+                        })
+                        .setNegativeButton("CANCEL", null)
+                        .show();
             }
-        }
+        } else {
+            // if transformer found
+            mListener.toggleBattleBtn(View.VISIBLE);
+            for (int i=0; i < transformerResponseList.size(); i++) {
+                Transformer transformer = new Transformer(transformerResponseList.get(i).getId(),
+                        transformerResponseList.get(i).getName(),
+                        transformerResponseList.get(i).getStrength(),
+                        transformerResponseList.get(i).getIntelligence(),
+                        transformerResponseList.get(i).getSpeed(),
+                        transformerResponseList.get(i).getEndurance(),
+                        transformerResponseList.get(i).getRank(),
+                        transformerResponseList.get(i).getCourage(),
+                        transformerResponseList.get(i).getFirepower(),
+                        transformerResponseList.get(i).getSkill(),
+                        transformerResponseList.get(i).getTeam(),
+                        transformerResponseList.get(i).getTeam_icon());
+                if (transformerResponseList.get(i).getTeam().equals("A")) {
+                    MainActivity.autobotsList.add(transformer);
+                } else {
+                    MainActivity.decepticonsList.add(transformer);
+                }
+            }
 
-        // sort by rank
-        Collections.sort(MainActivity.autobotsList, new Comparator<Transformer>() {
-            @Override
-            public int compare(Transformer o1, Transformer o2) {
-                return o2.getRank() - o1.getRank();
-            }
-        });
-        Collections.sort(MainActivity.decepticonsList, new Comparator<Transformer>() {
-            @Override
-            public int compare(Transformer o1, Transformer o2) {
-                return o2.getRank() - o1.getRank();
-            }
-        });
-        ArrayList<Transformer> newList = new ArrayList<>();
-        newList.addAll(MainActivity.autobotsList);
-        newList.addAll(MainActivity.decepticonsList);
+            // sort by rank
+            Collections.sort(MainActivity.autobotsList, new Comparator<Transformer>() {
+                @Override
+                public int compare(Transformer o1, Transformer o2) {
+                    return o2.getRank() - o1.getRank();
+                }
+            });
+            Collections.sort(MainActivity.decepticonsList, new Comparator<Transformer>() {
+                @Override
+                public int compare(Transformer o1, Transformer o2) {
+                    return o2.getRank() - o1.getRank();
+                }
+            });
+
+            newList.addAll(MainActivity.autobotsList);
+            newList.addAll(MainActivity.decepticonsList);
+        }
 
         return newList;
     }
@@ -263,5 +287,7 @@ public class TransformersListFragment extends BaseFragment implements Transforme
      */
     public interface OnFragmentInteractionListener {
         void editTransformer(Transformer transformerResponse);
+        void addTransformer();
+        void toggleBattleBtn(int visibility);
     }
 }

@@ -97,8 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/losing"
                 android:textAlignment="center"
-                android:textSize="@dimen/text_size_small"
-                android:text="Eco"/>
+                android:textSize="@dimen/text_size_small" />
 
         </RelativeLayout>
 
