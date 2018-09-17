@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
- * This is Unit Test for {@link CreateTransformerFragment}.
+ * This is Unit Test for {@link CreateTransformerFragment#createTransformerBody()} .
  * Use Mockito framework (mocking framework)
  *
  * Created by aiyamamoto on 2018-09-16.
